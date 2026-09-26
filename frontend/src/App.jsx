@@ -6,6 +6,11 @@ import CustomFurniture from './pages/CustomFurniture';
 import Vendors from './pages/Vendors';
 import VendorProfile from './pages/VendorProfile';
 import ProductDetails from './pages/ProductDetails';
+import Dashboard from './pages/Dashboard';
+import Checkout from './pages/Checkout';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import MapPage from './pages/MapPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -19,6 +24,11 @@ function App() {
         <Route path="/vendors" element={<CustomerLayout><Vendors /></CustomerLayout>} />
         <Route path="/vendor/:id" element={<CustomerLayout><VendorProfile /></CustomerLayout>} />
         <Route path="/product/:id" element={<CustomerLayout><ProductDetails /></CustomerLayout>} />
+        <Route path="/dashboard" element={<CustomerLayout><Dashboard /></CustomerLayout>} />
+        <Route path="/checkout" element={<CustomerLayout><Checkout /></CustomerLayout>} />
+        <Route path="/about" element={<CustomerLayout><About /></CustomerLayout>} />
+        <Route path="/contact" element={<CustomerLayout><Contact /></CustomerLayout>} />
+        <Route path="/map" element={<CustomerLayout><MapPage /></CustomerLayout>} />
         <Route path="/login" element={<CustomerLayout><Login /></CustomerLayout>} />
         <Route path="/register" element={<CustomerLayout><Register /></CustomerLayout>} />
         <Route path="/forgot-password" element={<CustomerLayout><ForgotPassword /></CustomerLayout>} />
