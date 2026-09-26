@@ -11,6 +11,7 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const vendorRoutes = require("./routes/vendorRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/vendors", vendorRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
   res.json({

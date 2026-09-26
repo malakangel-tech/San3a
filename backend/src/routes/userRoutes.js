@@ -1,6 +1,6 @@
 const express = require("express")
 const authMidllware =require("../middleware/authMiddleware")
-const allowRoles = require('../middleware/roleMiddlware')
+const allowRoles = require('../middleware/roleMiddleware')
 const router = express.Router();
 
 router.get("/profile" , authMidllware ,(req , res) => {
