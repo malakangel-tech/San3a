@@ -14,7 +14,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FDFCFB]">
+    <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212]">
       {/* هيدر تواصل معنا */}
       <section className="bg-brand-dark text-white py-24 px-6 text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-gold via-brand-dark to-brand-dark"></div>
@@ -29,56 +29,56 @@ const Contact = () => {
         
         {/* معلومات الاتصال */}
         <div className="space-y-8">
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className={`text-2xl font-bold text-brand-dark ${isAr ? '' : 'font-serif'}`}>معلومات التواصل</h3>
+          <div className="bg-white dark:bg-[#1E1E1E] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 space-y-6">
+            <h3 className={`text-2xl font-bold text-brand-dark dark:text-white ${isAr ? '' : 'font-serif'}`}>معلومات التواصل</h3>
             
-            <div className="flex items-center gap-4 text-gray-600">
+            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
               <div className="w-12 h-12 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold"><MapPin className="w-5 h-5"/></div>
               <div>
                 <h4 className="text-xs text-gray-400 uppercase font-semibold">الموقع</h4>
-                <p className="text-sm font-bold text-brand-dark">البصرة، العراق</p>
+                <p className="text-sm font-bold text-brand-dark dark:text-white">البصرة، العراق</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-gray-600">
+            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
               <div className="w-12 h-12 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold"><Phone className="w-5 h-5"/></div>
               <div>
                 <h4 className="text-xs text-gray-400 uppercase font-semibold">الهاتف</h4>
-                <p className="text-sm font-bold text-brand-dark">07757305530</p>
+                <p className="text-sm font-bold text-brand-dark dark:text-white">07757305530</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-gray-600">
+            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
               <div className="w-12 h-12 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold"><Mail className="w-5 h-5"/></div>
               <div>
                 <h4 className="text-xs text-gray-400 uppercase font-semibold">البريد الإلكتروني</h4>
-                <p className="text-sm font-bold text-brand-dark">malak2006malak28@gmail.com</p>
+                <p className="text-sm font-bold text-brand-dark dark:text-white">malak2006malak28@gmail.com</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* نموذج الإرسال */}
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white dark:bg-[#1E1E1E] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10">
           {sent ? (
             <div className="flex flex-col items-center justify-center h-full text-center py-12 space-y-4">
               <CheckCircle2 className="w-16 h-16 text-green-500" />
-              <h3 className="text-xl font-bold text-brand-dark">{t('message_sent')}</h3>
+              <h3 className="text-xl font-bold text-brand-dark dark:text-white">{t('message_sent')}</h3>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <h3 className={`text-2xl font-bold text-brand-dark mb-6 ${isAr ? '' : 'font-serif'}`}>أرسل رسالة</h3>
+              <h3 className={`text-2xl font-bold text-brand-dark dark:text-white mb-6 ${isAr ? '' : 'font-serif'}`}>أرسل رسالة</h3>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('your_name')}</label>
-                <input type="text" required className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm outline-none focus:border-brand-gold" />
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('your_name')}</label>
+                <input type="text" required className="w-full bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none focus:border-brand-gold" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('email')}</label>
-                <input type="email" required className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm outline-none focus:border-brand-gold" />
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('email')}</label>
+                <input type="email" required className="w-full bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none focus:border-brand-gold" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('your_message')}</label>
-                <textarea rows="4" required className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm outline-none focus:border-brand-gold resize-none"></textarea>
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('your_message')}</label>
+                <textarea rows="4" required className="w-full bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none focus:border-brand-gold resize-none"></textarea>
               </div>
               <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full bg-brand-dark text-white font-bold py-3.5 rounded-lg hover:bg-brand-gold transition-colors shadow-lg flex items-center justify-center gap-2">
                 {t('send_message')} <Send className="w-4 h-4" />

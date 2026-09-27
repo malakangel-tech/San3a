@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import VendorCard from '../components/VendorCard';
 
 const Vendors = () => {
+  const [localVendors, setLocalVendors] = useState([]);
+  useEffect(() => {
+    let stored = JSON.parse(localStorage.getItem('newVendors')) || [];
+    const currentRole = localStorage.getItem('userRole');
+    const currentName = localStorage.getItem('userName');
+    
+    if ((currentRole === 'craftsman' || currentRole === 'company') && currentName) {
+      if (!stored.some(v => v.name === currentName)) {
+        stored.push({ id: Date.now(), name: currentName, rating: 5, verified: true, isVerified: true, specialty: 'نجار عام', location: 'البصرة', image: 'https://via.placeholder.com/150', portfolio: [] });
+        localStorage.setItem('newVendors', JSON.stringify(stored));
+      }
+    }
+    setLocalVendors(stored);
+  }, []);
+
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
   
@@ -19,9 +34,10 @@ const Vendors = () => {
   ];
 
   const filteredVendors = allVendors.filter(vendor => vendor.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const allFilteredVendors = [...filteredVendors, ...localVendors.filter(v => v.name.toLowerCase().includes(searchTerm.toLowerCase()))];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FDFCFB]">
+    <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212]">
       
       {/* 1. Luxury Header */}
       <section className="relative w-full h-[45vh] flex items-center justify-center text-center">
@@ -39,25 +55,25 @@ const Vendors = () => {
         
         {/* Sidebar Filters (فلاتر جانبية) */}
         <div className="lg:w-1/4 flex flex-col gap-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <div className="flex items-center gap-2 mb-6 text-brand-dark font-bold text-lg">
+          <div className="bg-white dark:bg-[#1E1E1E] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10">
+            <div className="flex items-center gap-2 mb-6 text-brand-dark dark:text-white font-bold text-lg">
               <SlidersHorizontal className="w-5 h-5 text-brand-gold" />
               {t('filters')}
             </div>
 
             {/* البحث */}
             <div className="mb-6 relative">
-              <Search className={`w-4 h-4 text-gray-400 absolute top-3 ${isAr ? 'right-3' : 'left-3'}`} />
+              <Search className={`w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-gray-400 absolute top-3 ${isAr ? 'right-3' : 'left-3'}`} />
               <input 
                 type="text" placeholder={t('search_vendor')} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-                className={`w-full bg-gray-50 border border-gray-200 rounded-lg py-2 ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'} text-sm outline-none focus:border-brand-gold transition-colors`}
+                className={`w-full bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-white/10 rounded-lg py-2 ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'} text-sm outline-none focus:border-brand-gold transition-colors`}
               />
             </div>
 
             {/* فلتر المدينة */}
-            <div className="mb-6 border-t border-gray-100 pt-4">
-              <h4 className="font-semibold text-brand-dark mb-3 text-sm">{t('location')}</h4>
-              <div className="flex flex-col gap-2 text-sm text-gray-600">
+            <div className="mb-6 border-t border-gray-100 dark:border-white/10 pt-4">
+              <h4 className="font-semibold text-brand-dark dark:text-white mb-3 text-sm">{t('location')}</h4>
+              <div className="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-300">
                 <label className="flex items-center gap-2 cursor-pointer hover:text-brand-gold"><input type="checkbox" className="accent-brand-gold" /> {isAr ? 'البصرة' : 'Basra'}</label>
                 <label className="flex items-center gap-2 cursor-pointer hover:text-brand-gold"><input type="checkbox" className="accent-brand-gold" /> {isAr ? 'بغداد' : 'Baghdad'}</label>
                 <label className="flex items-center gap-2 cursor-pointer hover:text-brand-gold"><input type="checkbox" className="accent-brand-gold" /> {isAr ? 'أربيل' : 'Erbil'}</label>
@@ -65,8 +81,8 @@ const Vendors = () => {
             </div>
 
             {/* فلتر التوثيق */}
-            <div className="border-t border-gray-100 pt-4">
-              <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-brand-dark hover:text-brand-gold">
+            <div className="border-t border-gray-100 dark:border-white/10 pt-4">
+              <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-brand-dark dark:text-white hover:text-brand-gold">
                 <input type="checkbox" className="accent-brand-gold w-4 h-4" defaultChecked />
                 {t('verified')} فقط
               </label>
@@ -77,27 +93,27 @@ const Vendors = () => {
         {/* Vendors Grid Area */}
         <div className="lg:w-3/4 flex flex-col">
           {/* شريط الترتيب العلوي */}
-          <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-            <span className="text-sm font-bold text-gray-600">
-              {filteredVendors.length} {isAr ? 'حرفيين متاحين' : 'Craftsmen found'}
+          <div className="flex justify-between items-center mb-6 bg-white dark:bg-[#1E1E1E] p-4 rounded-xl shadow-sm border border-gray-100 dark:border-white/10">
+            <span className="text-sm font-bold text-gray-600 dark:text-gray-300">
+              {allFilteredVendors.length} {isAr ? 'حرفيين متاحين' : 'Craftsmen found'}
             </span>
-            <div className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer hover:text-brand-gold">
-              {t('sort_by')}: <span className="font-bold text-brand-dark">{t('highest_rated')}</span> <ChevronDown className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer hover:text-brand-gold">
+              {t('sort_by')}: <span className="font-bold text-brand-dark dark:text-white">{t('highest_rated')}</span> <ChevronDown className="w-4 h-4" />
             </div>
           </div>
 
           {/* شبكة البطاقات */}
-          {filteredVendors.length > 0 ? (
+          {allFilteredVendors.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredVendors.map((vendor, index) => (
+              {allFilteredVendors.map((vendor, index) => (
                 <motion.div key={vendor.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
                   <VendorCard {...vendor} />
                 </motion.div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
-              <p className="text-lg text-gray-400">لا توجد نتائج مطابقة لبحثك.</p>
+            <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#1E1E1E] rounded-2xl border border-dashed border-gray-200 dark:border-white/10">
+              <p className="text-lg text-gray-400 dark:text-gray-500 dark:text-gray-400">لا توجد نتائج مطابقة لبحثك.</p>
             </div>
           )}
         </div>

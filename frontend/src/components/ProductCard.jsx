@@ -32,20 +32,20 @@ const ProductCard = ({ id, image, title, price, rating, isCustomizable, onCompar
         {/* زر المقارنة السريع */}
         <button 
           onClick={(e) => { e.stopPropagation(); onCompare && onCompare({ id, image, title, price, rating }); }}
-          className={`absolute top-3 right-12 p-2 rounded-full transition-colors z-20 ${isCompared ? 'bg-brand-gold text-white' : 'bg-white/80 dark:bg-black/60 text-gray-600 dark:text-gray-300 hover:text-brand-gold'}`}
+          className={`absolute top-3 right-12 p-2 rounded-full transition-colors z-20 ${isCompared ? 'bg-brand-gold text-white' : 'bg-white dark:bg-[#1E1E1E]/80 dark:bg-black/60 text-gray-600 dark:text-gray-300 hover:text-brand-gold'}`}
           title="مقارنة المنتج"
         >
           <Scale className="w-4 h-4" />
         </button>
 
-        <button onClick={(e) => e.stopPropagation()} className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-black/60 rounded-full text-gray-400 hover:text-red-500 transition-colors z-20">
+        <button onClick={(e) => e.stopPropagation()} className="absolute top-3 right-3 p-2 bg-white dark:bg-[#1E1E1E]/80 dark:bg-black/60 rounded-full text-gray-400 hover:text-red-500 transition-colors z-20">
         </button>
 
         <div className="absolute inset-x-0 bottom-0 p-3 flex justify-center gap-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
            <Link to={`/product/${id}`} className="bg-brand-dark text-white p-2 rounded-md hover:bg-brand-gold transition shadow-lg">
              <Eye className="w-4 h-4"/>
            </Link>
-           <button className="bg-white text-brand-dark p-2 rounded-md hover:bg-brand-gold hover:text-white transition shadow-lg">
+           <button className="bg-white dark:bg-[#1E1E1E] text-brand-dark dark:text-white p-2 rounded-md hover:bg-brand-gold hover:text-white transition shadow-lg">
              <ShoppingCart className="w-4 h-4"/>
            </button>
         </div>

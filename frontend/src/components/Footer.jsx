@@ -38,13 +38,13 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4 text-brand-gold">{t('stay_updated')}</h3>
           <p className="text-xs text-gray-400 mb-4">{t('newsletter_desc')}</p>
           <div className={`flex ${isAr ? 'flex-row' : 'flex-row-reverse'}`}>
-            <input type="email" placeholder={t('email_placeholder')} className={`bg-white/5 border border-white/10 px-4 py-2 w-full outline-none focus:border-brand-gold text-sm ${isAr ? 'rounded-r-md' : 'rounded-l-md'}`} />
+            <input type="email" placeholder={t('email_placeholder')} className={`bg-white dark:bg-[#1E1E1E]/5 border border-white/10 px-4 py-2 w-full outline-none focus:border-brand-gold text-sm ${isAr ? 'rounded-r-md' : 'rounded-l-md'}`} />
             <button className={`bg-brand-gold text-white px-4 py-2 text-sm font-bold hover:bg-brand-gold/80 ${isAr ? 'rounded-l-md' : 'rounded-r-md'}`}>{t('subscribe_btn')}</button>
           </div>
         </div>
       </div>
       
-      <div className="text-center text-xs text-gray-500 mt-8">
+      <div className="text-center text-xs text-gray-500 dark:text-gray-400 mt-8">
         © {new Date().getFullYear()} San3a Platform. All rights reserved.
       </div>
     </footer>

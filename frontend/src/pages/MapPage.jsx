@@ -122,8 +122,8 @@ const MapPage = () => {
               >
                 <Popup>
                   <div className="p-2 text-right">
-                    <h4 className="font-bold text-brand-dark text-sm">{loc.name}</h4>
-                    <p className="text-xs text-gray-500">{loc.specialty}</p>
+                    <h4 className="font-bold text-brand-dark dark:text-white text-sm">{loc.name}</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{loc.specialty}</p>
                   </div>
                 </Popup>
               </Marker>
@@ -176,12 +176,12 @@ const MapPage = () => {
           <form onSubmit={handleAddLocation} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('shop_name')}</label>
-                <input type="text" required value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('shop_name_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white" />
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('shop_name')}</label>
+                <input type="text" required value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('shop_name_placeholder')} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('activity_type')}</label>
-                <select value={newType} onChange={(e) => setNewType(e.target.value)} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('activity_type')}</label>
+                <select value={newType} onChange={(e) => setNewType(e.target.value)} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white">
                   <option value="craftsman">{isAr ? 'ورشة نجار معتمد' : 'Verified Craftsman Workshop'}</option>
                   <option value="showroom">{isAr ? 'معرض أثاث فاخر' : 'Luxury Furniture Showroom'}</option>
                 </select>
@@ -190,12 +190,12 @@ const MapPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('specialty')}</label>
-                <input type="text" value={newSpecialty} onChange={(e) => setNewSpecialty(e.target.value)} placeholder={t('specialty_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white" />
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('specialty')}</label>
+                <input type="text" value={newSpecialty} onChange={(e) => setNewSpecialty(e.target.value)} placeholder={t('specialty_placeholder')} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">{t('address_field')}</label>
-                <input type="text" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} placeholder={t('address_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white" />
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('address_field')}</label>
+                <input type="text" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} placeholder={t('address_placeholder')} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 text-sm outline-none dark:text-white" />
               </div>
             </div>
 

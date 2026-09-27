@@ -12,7 +12,7 @@ const VendorCard = ({ id, image, name, specialty, rating, verified, location, pr
   return (
     <motion.div 
       whileHover={{ y: -8 }}
-      className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-2xl hover:border-brand-gold/30 transition-all duration-500 flex flex-col group relative"
+      className="bg-white dark:bg-[#1E1E1E] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-white/10 hover:shadow-2xl hover:border-brand-gold/30 transition-all duration-500 flex flex-col group relative"
     >
       {verified && (
         <div className="absolute top-4 left-4 right-auto bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1 z-10">
@@ -21,31 +21,31 @@ const VendorCard = ({ id, image, name, specialty, rating, verified, location, pr
       )}
 
       <div className="flex flex-col items-center text-center mt-2 mb-4">
-        <div className="w-20 h-20 rounded-full overflow-hidden mb-3 p-1 border-2 border-gray-100 group-hover:border-brand-gold transition-colors duration-300">
+        <div className="w-20 h-20 rounded-full overflow-hidden mb-3 p-1 border-2 border-gray-100 dark:border-white/10 group-hover:border-brand-gold transition-colors duration-300">
           <img src={image} alt={name} className="w-full h-full object-cover rounded-full" />
         </div>
-        <h3 className={`text-xl font-bold text-brand-dark flex items-center justify-center gap-1 ${isAr ? '' : 'font-serif'}`}>
+        <h3 className={`text-xl font-bold text-brand-dark dark:text-white flex items-center justify-center gap-1 ${isAr ? '' : 'font-serif'}`}>
           {name}
         </h3>
         <p className="text-brand-gold text-xs font-medium tracking-wide mt-1">{specialty}</p>
       </div>
       
       {(location || projectsCount || experience) && (
-        <div className="grid grid-cols-3 gap-2 border-y border-gray-100 py-3 mb-4 text-center">
+        <div className="grid grid-cols-3 gap-2 border-y border-gray-100 dark:border-white/10 py-3 mb-4 text-center">
           <div className="flex flex-col items-center justify-center">
-            <MapPin className="w-4 h-4 text-gray-400 mb-1" />
-            <span className="text-[10px] text-gray-500 uppercase">{t('location')}</span>
-            <span className="text-xs font-bold text-brand-dark">{location || '-'}</span>
+            <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-gray-400 mb-1" />
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase">{t('location')}</span>
+            <span className="text-xs font-bold text-brand-dark dark:text-white">{location || '-'}</span>
           </div>
-          <div className="flex flex-col items-center justify-center border-x border-gray-100">
-            <Briefcase className="w-4 h-4 text-gray-400 mb-1" />
-            <span className="text-[10px] text-gray-500 uppercase">{t('projects')}</span>
-            <span className="text-xs font-bold text-brand-dark">{projectsCount ? `+${projectsCount}` : '-'}</span>
+          <div className="flex flex-col items-center justify-center border-x border-gray-100 dark:border-white/10">
+            <Briefcase className="w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-gray-400 mb-1" />
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase">{t('projects')}</span>
+            <span className="text-xs font-bold text-brand-dark dark:text-white">{projectsCount ? `+${projectsCount}` : '-'}</span>
           </div>
           <div className="flex flex-col items-center justify-center">
             <Star className="w-4 h-4 text-brand-gold mb-1" />
-            <span className="text-[10px] text-gray-500 uppercase">{t('experience')}</span>
-            <span className="text-xs font-bold text-brand-dark">{experience || '-'}</span>
+            <span className="text-[10px] text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase">{t('experience')}</span>
+            <span className="text-xs font-bold text-brand-dark dark:text-white">{experience || '-'}</span>
           </div>
         </div>
       )}
@@ -53,7 +53,7 @@ const VendorCard = ({ id, image, name, specialty, rating, verified, location, pr
       {portfolio && portfolio.length > 0 && (
         <div className="flex gap-2 mb-5">
           {portfolio.slice(0, 3).map((img, idx) => (
-            <div key={idx} className="h-12 flex-1 rounded-md overflow-hidden bg-gray-50">
+            <div key={idx} className="h-12 flex-1 rounded-md overflow-hidden bg-gray-50 dark:bg-[#121212]">
               <img src={img} alt="work" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
             </div>
           ))}
@@ -61,7 +61,7 @@ const VendorCard = ({ id, image, name, specialty, rating, verified, location, pr
       )}
       
       {/* تحويل الزر إلى رابط ذكي */}
-      <Link to={`/vendor/${id}`} className="mt-auto w-full flex items-center justify-center py-2.5 bg-gray-50 rounded-lg text-sm font-semibold text-brand-dark hover:bg-brand-gold hover:text-white transition-colors duration-300">
+      <Link to={`/vendor/${id}`} className="mt-auto w-full flex items-center justify-center py-2.5 bg-gray-50 dark:bg-[#121212] rounded-lg text-sm font-semibold text-brand-dark dark:text-white hover:bg-brand-gold hover:text-white transition-colors duration-300">
         {t('view_profile')} 
         {isAr ? <ChevronLeft className="w-4 h-4 mr-1" /> : <ChevronRight className="w-4 h-4 ml-1" />}
       </Link>

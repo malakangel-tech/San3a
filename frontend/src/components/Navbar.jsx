@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`pt-6 pb-4 px-6 md:px-16 flex justify-between items-center relative z-40 transition-colors duration-300 ${darkMode ? 'bg-[#181818] text-white border-b border-white/10' : 'bg-brand-bg text-brand-dark'}`}>
+    <nav className={`pt-6 pb-4 px-6 md:px-16 flex justify-between items-center relative z-40 transition-colors duration-300 ${darkMode ? 'bg-[#181818] text-white border-b border-white/10' : 'bg-brand-bg text-brand-dark dark:text-white'}`}>
       
       <Link to="/" className="text-3xl font-bold tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
         San3a

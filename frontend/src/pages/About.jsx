@@ -8,7 +8,7 @@ const About = () => {
   const isAr = i18n.language === 'ar';
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FDFCFB]">
+    <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212]">
       {/* هيدر تعريفي فاخر */}
       <section className="bg-brand-dark text-white py-24 px-6 text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-gold via-brand-dark to-brand-dark"></div>
@@ -31,19 +31,19 @@ const About = () => {
         </div>
 
         {/* مميزات الشركة */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-gray-100">
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col items-center">
-            <h3 className="font-bold text-brand-dark text-lg mb-2">جودة استثنائية</h3>
-            <p className="text-gray-500 text-sm">نستخدم أجود أنواع الأخشاب والخامات العالمية.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-gray-100 dark:border-white/10">
+          <div className="bg-white dark:bg-[#1E1E1E] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 text-center flex flex-col items-center">
+            <h3 className="font-bold text-brand-dark dark:text-white text-lg mb-2">جودة استثنائية</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">نستخدم أجود أنواع الأخشاب والخامات العالمية.</p>
           </div>
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col items-center">
+          <div className="bg-white dark:bg-[#1E1E1E] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 text-center flex flex-col items-center">
             <ShieldCheck className="w-10 h-10 text-brand-gold mb-4" />
-            <h3 className="font-bold text-brand-dark text-lg mb-2">ضمان شامل</h3>
-            <p className="text-gray-500 text-sm">ضمان حقيقي لمدة 5 سنوات على كافة قطع الأثاث.</p>
+            <h3 className="font-bold text-brand-dark dark:text-white text-lg mb-2">ضمان شامل</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">ضمان حقيقي لمدة 5 سنوات على كافة قطع الأثاث.</p>
           </div>
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col items-center">
-            <h3 className="font-bold text-brand-dark text-lg mb-2">ثقة وموثوقية</h3>
-            <p className="text-gray-500 text-sm">نتعامل مع نخبة الحرفيين المعتمدين في العراق.</p>
+          <div className="bg-white dark:bg-[#1E1E1E] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 text-center flex flex-col items-center">
+            <h3 className="font-bold text-brand-dark dark:text-white text-lg mb-2">ثقة وموثوقية</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">نتعامل مع نخبة الحرفيين المعتمدين في العراق.</p>
           </div>
         </div>
       </section>

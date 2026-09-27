@@ -51,7 +51,7 @@ const CustomFurniture = () => {
           <h1 className={`text-3xl md:text-5xl font-bold text-brand-dark dark:text-white mb-4 ${isAr ? '' : 'font-serif'}`}>
             {t('custom_heading')}
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto text-sm">
+          <p className="text-gray-600 dark:text-gray-300 dark:text-gray-400 max-w-xl mx-auto text-sm">
             {t('custom_desc')}
           </p>
         </div>
@@ -60,7 +60,7 @@ const CustomFurniture = () => {
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white dark:bg-[#1E1E1E] p-12 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 text-center space-y-4">
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto" />
             <h3 className="text-2xl font-bold text-brand-dark dark:text-white">{t('custom_success_title')}</h3>
-            <p className="text-gray-500 text-sm">{t('custom_success_desc')}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">{t('custom_success_desc')}</p>
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -72,7 +72,7 @@ const CustomFurniture = () => {
                 <select 
                   value={furnitureType} 
                   onChange={(e) => setFurnitureType(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold dark:text-white"
+                  className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold dark:text-white"
                 >
                   <option value="sofa">{t('sofa_option')}</option>
                   <option value="table">{t('table_option')}</option>
@@ -86,7 +86,7 @@ const CustomFurniture = () => {
                   <select 
                     value={woodType} 
                     onChange={(e) => setWoodType(e.target.value)}
-                    className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold dark:text-white"
+                    className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold dark:text-white"
                   >
                     <option value="beech">{t('beech_wood')}</option>
                     <option value="oak">{t('oak_wood')}</option>
@@ -98,7 +98,7 @@ const CustomFurniture = () => {
                   <select 
                     value={size} 
                     onChange={(e) => setSize(e.target.value)}
-                    className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold dark:text-white"
+                    className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold dark:text-white"
                   >
                     <option value="small">{t('size_small')}</option>
                     <option value="medium">{t('size_medium')}</option>
@@ -109,7 +109,7 @@ const CustomFurniture = () => {
 
               <div>
                 <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{t('details_placeholder')}</label>
-                <textarea rows="4" value={details} onChange={(e) => setDetails(e.target.value)} placeholder={t('details_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold resize-none dark:text-white"></textarea>
+                <textarea rows="4" value={details} onChange={(e) => setDetails(e.target.value)} placeholder={t('details_placeholder')} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold resize-none dark:text-white"></textarea>
               </div>
 
               <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-6 text-center cursor-pointer hover:border-brand-gold transition-colors">

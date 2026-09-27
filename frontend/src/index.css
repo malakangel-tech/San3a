@@ -17,3 +17,40 @@
     font-family: var(--font-sans);
   }
 }
+
+
+@layer base {
+  body {
+    @apply bg-[#FDFCFB] text-[#1E1E1E] transition-colors duration-300;
+  }
+  .dark body {
+    @apply bg-[#121212] text-[#FDFCFB];
+  }
+}
+
+/* ====== الوضع الليلي الإجباري الشامل ====== */
+.dark .bg-white {
+  background-color: #1E1E1E !important;
+  color: #FDFCFB !important;
+}
+.dark .bg-gray-50, 
+.dark .bg-\[\#FDFCFB\] {
+  background-color: #121212 !important;
+}
+.dark .text-brand-dark, 
+.dark .text-gray-900, 
+.dark .text-gray-800 {
+  color: #ffffff !important;
+}
+.dark .text-gray-600, 
+.dark .text-gray-500 {
+  color: #d1d5db !important;
+}
+.dark .border-gray-100, 
+.dark .border-gray-200 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark .shadow-sm, 
+.dark .shadow-lg {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+}

@@ -43,14 +43,14 @@ const CartDrawer = () => {
             animate={{ x: 0 }}
             exit={{ x: isAr ? '-100%' : '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className={`fixed top-0 ${isAr ? 'left-0' : 'right-0'} w-full max-w-md h-full bg-white shadow-2xl z-50 flex flex-col`}
+            className={`fixed top-0 ${isAr ? 'left-0' : 'right-0'} w-full max-w-md h-full bg-white dark:bg-[#1E1E1E] shadow-2xl z-50 flex flex-col`}
           >
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-brand-dark font-bold text-xl">
+            <div className="p-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-brand-dark dark:text-white font-bold text-xl">
                 <ShoppingBag className="w-6 h-6 text-brand-gold" />
                 {t('cart_title')} ({totalItems})
               </div>
-              <button onClick={() => setCartOpen(false)} className="p-2 text-gray-400 hover:text-brand-dark transition-colors">
+              <button onClick={() => setCartOpen(false)} className="p-2 text-gray-400 hover:text-brand-dark dark:text-white transition-colors">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -58,17 +58,17 @@ const CartDrawer = () => {
             <div className="flex-grow overflow-y-auto p-6 space-y-4">
               {cartItems.length > 0 ? (
                 cartItems.map((item) => (
-                  <div key={item.id} className="flex gap-4 items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded-lg bg-white" />
+                  <div key={item.id} className="flex gap-4 items-center bg-gray-50 dark:bg-[#121212] p-4 rounded-xl border border-gray-100 dark:border-white/10">
+                    <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded-lg bg-white dark:bg-[#1E1E1E]" />
                     <div className="flex-grow">
-                      <h4 className="font-bold text-brand-dark text-sm mb-1">{item.title}</h4>
+                      <h4 className="font-bold text-brand-dark dark:text-white text-sm mb-1">{item.title}</h4>
                       <p className="text-brand-gold font-bold text-sm mb-3">${item.price * item.quantity}</p>
                       
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center border border-gray-200 rounded bg-white">
-                          <button onClick={() => updateQuantity(item.id, -1)} className="p-1 px-2 text-gray-500 hover:text-brand-dark"><Minus className="w-3 h-3" /></button>
+                        <div className="flex items-center border border-gray-200 dark:border-white/10 rounded bg-white dark:bg-[#1E1E1E]">
+                          <button onClick={() => updateQuantity(item.id, -1)} className="p-1 px-2 text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:text-white"><Minus className="w-3 h-3" /></button>
                           <span className="px-2 text-xs font-bold">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.id, 1)} className="p-1 px-2 text-gray-500 hover:text-brand-dark"><Plus className="w-3 h-3" /></button>
+                          <button onClick={() => updateQuantity(item.id, 1)} className="p-1 px-2 text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:text-white"><Plus className="w-3 h-3" /></button>
                         </div>
                         <button onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500 transition-colors">
                           <Trash2 className="w-4 h-4" />
@@ -86,7 +86,7 @@ const CartDrawer = () => {
             </div>
 
             {cartItems.length > 0 && (
-              <div className="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
+              <div className="p-6 border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-[#121212] space-y-4">
                 <div className="flex gap-2">
                   <div className="relative flex-grow">
                     <Tag className={`absolute top-3 ${isAr ? 'right-3' : 'left-3'} w-4 h-4 text-gray-400`} />
@@ -95,7 +95,7 @@ const CartDrawer = () => {
                       placeholder={isAr ? "كود الخصم (جرب San3a10)" : "Promo code (Try San3a10)"}
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
-                      className={`w-full bg-white border border-gray-200 rounded-lg py-2.5 ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'} text-xs outline-none focus:border-brand-gold`}
+                      className={`w-full bg-white dark:bg-[#1E1E1E] border border-gray-200 dark:border-white/10 rounded-lg py-2.5 ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'} text-xs outline-none focus:border-brand-gold`}
                     />
                   </div>
                   <button onClick={applyPromo} className="bg-brand-dark text-white px-4 rounded-lg text-xs font-bold hover:bg-brand-gold transition-colors">
@@ -109,7 +109,7 @@ const CartDrawer = () => {
                   </p>
                 )}
 
-                <div className="space-y-1.5 text-sm text-gray-600 pt-2 border-t border-gray-200">
+                <div className="space-y-1.5 text-sm text-gray-600 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-white/10">
                   <div className="flex justify-between">
                     <span>{t('subtotal')}:</span>
                     <span className="font-bold">${totalPrice}</span>
@@ -120,7 +120,7 @@ const CartDrawer = () => {
                       <span>-{Math.round(totalPrice * discount)}$</span>
                     </div>
                   )}
-                  <div className="flex justify-between items-center text-lg font-bold text-brand-dark pt-2 border-t border-gray-200">
+                  <div className="flex justify-between items-center text-lg font-bold text-brand-dark dark:text-white pt-2 border-t border-gray-200 dark:border-white/10">
                     <span>الإجمالي الكلي:</span>
                     <span className="text-brand-gold" style={{ fontFamily: "'Playfair Display', serif" }}>${finalTotal}</span>
                   </div>

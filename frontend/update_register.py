@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import os
+
+path = "src/pages/Register.jsx"
+new_code = """import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Mail, Lock, Eye, EyeOff, ShieldAlert, ImageIcon, FileText, AlertCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -30,7 +33,7 @@ const Register = () => {
     }
 
     // 2. فحص قوة كلمة المرور (8 أحرف، تحتوي على أرقام وحروف)
-    if (formData.password.length < 8 || !/\d/.test(formData.password) || !/[a-zA-Z]/.test(formData.password)) {
+    if (formData.password.length < 8 || !/\\d/.test(formData.password) || !/[a-zA-Z]/.test(formData.password)) {
       setError('⚠️ يجب أن تتكون كلمة المرور من 8 أحرف على الأقل، وتحتوي على حروف وأرقام.');
       return;
     }
@@ -151,3 +154,8 @@ const Register = () => {
 };
 
 export default Register;
+"""
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(new_code)
+print("✅ تم تحديث صفحة التسجيل وإضافة الميزات المطلوبة بنجاح!")

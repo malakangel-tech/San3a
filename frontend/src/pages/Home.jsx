@@ -91,7 +91,7 @@ const Home = () => {
             </div>
             <div className="flex gap-2">
               {comparedProducts.map(p => (
-                <span key={p.id} className="bg-white/10 px-3 py-1 rounded-lg text-xs">{p.title}</span>
+                <span key={p.id} className="bg-white dark:bg-[#1E1E1E]/10 px-3 py-1 rounded-lg text-xs">{p.title}</span>
               ))}
             </div>
             <button 
@@ -111,7 +111,7 @@ const Home = () => {
         {showComparisonModal && (
           <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6 backdrop-blur-sm">
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white dark:bg-[#1E1E1E] w-full max-w-3xl rounded-2xl p-8 relative shadow-2xl border border-gray-100 dark:border-white/10">
-              <button onClick={() => setShowComparisonModal(false)} className="absolute top-6 right-6 text-gray-400 hover:text-brand-dark dark:hover:text-white"><X className="w-6 h-6"/></button>
+              <button onClick={() => setShowComparisonModal(false)} className="absolute top-6 right-6 text-gray-400 hover:text-brand-dark dark:text-white dark:hover:text-white"><X className="w-6 h-6"/></button>
               
               <h3 className={`text-2xl font-bold text-brand-dark dark:text-white mb-6 ${isAr ? '' : 'font-serif'}`}>جدول مقارنة المنتجات</h3>
 
@@ -124,14 +124,14 @@ const Home = () => {
                   </div>
                 ))}
 
-                <div className="text-xs font-semibold text-gray-500 py-3 border-t border-gray-100 dark:border-white/10">السعر</div>
+                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 py-3 border-t border-gray-100 dark:border-white/10">السعر</div>
                 {comparedProducts.map(p => (
                   <div key={p.id} className="text-center font-bold text-brand-gold py-3 border-t border-gray-100 dark:border-white/10" style={{ fontFamily: "'Playfair Display', serif" }}>
                     ${p.price}
                   </div>
                 ))}
 
-                <div className="text-xs font-semibold text-gray-500 py-3 border-t border-gray-100 dark:border-white/10">التقييم</div>
+                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 py-3 border-t border-gray-100 dark:border-white/10">التقييم</div>
                 {comparedProducts.map(p => (
                   <div key={p.id} className="text-center text-xs font-semibold text-gray-700 dark:text-gray-300 py-3 border-t border-gray-100 dark:border-white/10">
                     ⭐ {p.rating} / 5

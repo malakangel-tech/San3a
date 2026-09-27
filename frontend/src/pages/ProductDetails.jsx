@@ -103,7 +103,7 @@ const ProductDetails = () => {
               <div 
                 key={idx} 
                 onClick={() => setMainImage(idx)}
-                className={`w-24 h-24 bg-white dark:bg-[#1E1E1E] rounded-xl p-2 cursor-pointer border-2 transition-colors ${mainImage === idx ? 'border-brand-gold' : 'border-transparent hover:border-gray-200 dark:hover:border-white/20'}`}
+                className={`w-24 h-24 bg-white dark:bg-[#1E1E1E] rounded-xl p-2 cursor-pointer border-2 transition-colors ${mainImage === idx ? 'border-brand-gold' : 'border-transparent hover:border-gray-200 dark:border-white/10 dark:hover:border-white/20'}`}
               >
                 <img src={img} alt="thumbnail" className="w-full h-full object-cover rounded-md" />
               </div>
@@ -143,9 +143,9 @@ const ProductDetails = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 mb-10 border-b border-gray-100 dark:border-white/10 pb-10">
             <div className="flex items-center justify-between border border-gray-300 dark:border-white/20 rounded-md w-full sm:w-32 px-4 py-3 bg-white dark:bg-[#1E1E1E]">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:hover:text-white"><Minus className="w-4 h-4" /></button>
+              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:text-white dark:hover:text-white"><Minus className="w-4 h-4" /></button>
               <span className="font-bold text-brand-dark dark:text-white">{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)} className="text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:hover:text-white"><Plus className="w-4 h-4" /></button>
+              <button onClick={() => setQuantity(quantity + 1)} className="text-gray-500 dark:text-gray-400 hover:text-brand-dark dark:text-white dark:hover:text-white"><Plus className="w-4 h-4" /></button>
             </div>
             <motion.button 
               onClick={handleAddToCart}
@@ -169,7 +169,7 @@ const ProductDetails = () => {
           <div className="space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-brand-dark dark:text-white mb-2 uppercase tracking-wider">{t('description')}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{product.desc}</p>
+              <p className="text-gray-600 dark:text-gray-300 dark:text-gray-400 text-sm leading-relaxed">{product.desc}</p>
             </div>
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-white/10">
               <div>
@@ -183,7 +183,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <div className="mt-10 bg-gray-50 dark:bg-[#1E1E1E] p-6 rounded-xl space-y-4 border border-gray-100 dark:border-white/10">
+          <div className="mt-10 bg-gray-50 dark:bg-[#121212] dark:bg-[#1E1E1E] p-6 rounded-xl space-y-4 border border-gray-100 dark:border-white/10">
             <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 font-medium"><Truck className="w-5 h-5 text-brand-gold"/> {t('free_shipping')}</div>
             <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 font-medium"><ShieldCheck className="w-5 h-5 text-brand-gold"/> {t('guarantee')}</div>
             <div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 font-medium"><Clock className="w-5 h-5 text-brand-gold"/> {t('support_247')}</div>
@@ -197,7 +197,7 @@ const ProductDetails = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <div>
             <h3 className={`text-2xl font-bold text-brand-dark dark:text-white mb-1 ${isAr ? '' : 'font-serif'}`}>آراء العملاء الموثوقة</h3>
-            <p className="text-gray-500 text-xs">صور حقيقية وتقييمات من عملاء اقتنوا القطعة</p>
+            <p className="text-gray-500 dark:text-gray-400 text-xs">صور حقيقية وتقييمات من عملاء اقتنوا القطعة</p>
           </div>
           <button onClick={() => setShowReviewModal(true)} className="bg-brand-gold text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-brand-gold/80 transition-colors shadow-md flex items-center gap-2">
             <MessageSquare className="w-4 h-4"/> أضف تقييمك
@@ -237,8 +237,8 @@ const ProductDetails = () => {
               
               <form onSubmit={handleAddReview} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">التقييم بالنجوم</label>
-                  <select value={newRating} onChange={(e) => setNewRating(Number(e.target.value))} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none dark:text-white">
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">التقييم بالنجوم</label>
+                  <select value={newRating} onChange={(e) => setNewRating(Number(e.target.value))} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none dark:text-white">
                     <option value={5}>⭐⭐⭐⭐⭐ (5/5 ممتاز)</option>
                     <option value={4}>⭐⭐⭐⭐ (4/5 جيد جداً)</option>
                     <option value={3}>⭐⭐⭐ (3/5 متوسط)</option>
@@ -246,13 +246,13 @@ const ProductDetails = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">تعليقك الكريم</label>
-                  <textarea rows="3" required value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="اكتب تجربتك مع جودة القطعة والتوصيل..." className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none resize-none dark:text-white"></textarea>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">تعليقك الكريم</label>
+                  <textarea rows="3" required value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="اكتب تجربتك مع جودة القطعة والتوصيل..." className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-lg p-3 text-sm outline-none resize-none dark:text-white"></textarea>
                 </div>
 
                 <div className="flex gap-4 pt-4">
                   <button type="submit" className="flex-grow bg-brand-dark dark:bg-brand-gold text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider hover:bg-brand-gold">إرسال التقييم</button>
-                  <button type="button" onClick={() => setShowReviewModal(false)} className="px-5 border border-gray-200 dark:border-white/10 rounded-xl text-xs font-semibold text-gray-500">إلغاء</button>
+                  <button type="button" onClick={() => setShowReviewModal(false)} className="px-5 border border-gray-200 dark:border-white/10 rounded-xl text-xs font-semibold text-gray-500 dark:text-gray-400">إلغاء</button>
                 </div>
               </form>
             </motion.div>

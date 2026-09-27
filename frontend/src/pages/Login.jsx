@@ -8,9 +8,29 @@ const Login = () => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
   const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (email === 'admin@san3a.com' || email === 'admin') {
+      localStorage.setItem('userRole', 'admin');
+      localStorage.setItem('userName', 'مدير النظام (ملاك)');
+      localStorage.setItem('userEmail', 'admin@san3a.com');
+      navigate('/dashboard');
+    } else {
+      const existingRole = localStorage.getItem('userRole');
+      if(!existingRole) {
+         localStorage.setItem('userRole', 'user');
+         localStorage.setItem('userName', 'مستخدم');
+      }
+      localStorage.setItem('userEmail', email);
+      navigate('/');
+    }
+  };
+
   
   // حالة التحكم بظهور كلمة المرور
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
 
   return (
     <div className="flex min-h-[calc(100vh-80px)] bg-brand-bg">
@@ -27,30 +47,30 @@ const Login = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-16">
         <div className="w-full max-w-md">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className={`text-3xl md:text-4xl font-bold text-brand-dark mb-2 ${isAr ? '' : 'font-serif'}`}>{t('welcome_back')}</h1>
-            <p className="text-gray-500 mb-8">{t('login_desc')}</p>
+            <h1 className={`text-3xl md:text-4xl font-bold text-brand-dark dark:text-white mb-2 ${isAr ? '' : 'font-serif'}`}>{t('welcome_back')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mb-8">{t('login_desc')}</p>
           </motion.div>
 
-          <form onSubmit={(e) => { e.preventDefault(); navigate('/'); }} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-5">
             <motion.div initial={{ opacity: 0, x: isAr ? 20 : -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-              <label className="block text-sm font-semibold text-brand-dark mb-2">{t('email')}</label>
+              <label className="block text-sm font-semibold text-brand-dark dark:text-white mb-2">{t('email')}</label>
               <div className="relative">
                 <Mail className={`absolute top-3.5 ${isAr ? 'right-4' : 'left-4'} w-5 h-5 text-gray-400`} />
-                <input type="email" required className={`w-full bg-white border border-gray-200 rounded-lg py-3 ${isAr ? 'pr-12 pl-4' : 'pl-12 pr-4'} outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all`} placeholder="mail@example.com" />
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full bg-white dark:bg-[#1E1E1E] border border-gray-200 dark:border-white/10 rounded-lg py-3 ${isAr ? 'pr-12 pl-4' : 'pl-12 pr-4'} outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all`} placeholder="mail@example.com" />
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: isAr ? 20 : -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-semibold text-brand-dark">{t('password')}</label>
-                <Link to="/forgot-password" className="text-xs font-semibold text-brand-gold hover:text-brand-dark transition-colors">{t('forgot_password')}</Link>
+                <label className="text-sm font-semibold text-brand-dark dark:text-white">{t('password')}</label>
+                <Link to="/forgot-password" className="text-xs font-semibold text-brand-gold hover:text-brand-dark dark:text-white transition-colors">{t('forgot_password')}</Link>
               </div>
               <div className="relative">
                 <Lock className={`absolute top-3.5 ${isAr ? 'right-4' : 'left-4'} w-5 h-5 text-gray-400`} />
                 <input 
                   type={showPassword ? "text" : "password"} 
                   required 
-                  className="w-full bg-white border border-gray-200 rounded-lg py-3 px-12 outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all" 
+                  className="w-full bg-white dark:bg-[#1E1E1E] border border-gray-200 dark:border-white/10 rounded-lg py-3 px-12 outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all" 
                   placeholder="••••••••" 
                 />
                 <button 
@@ -70,7 +90,7 @@ const Login = () => {
             </motion.div>
           </form>
 
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-8 text-center text-sm text-gray-500">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
             {t('no_account')} <Link to="/register" className="text-brand-gold font-bold hover:underline">{t('create_account')}</Link>
           </motion.p>
         </div>

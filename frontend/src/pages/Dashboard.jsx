@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('workshop');
@@ -83,7 +84,7 @@ const Dashboard = () => {
                 </span>
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-1">{userEmail}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{userEmail}</p>
           </div>
 
           <button onClick={() => { localStorage.clear(); navigate('/login'); }} className="flex items-center gap-2 text-red-500 bg-red-50 dark:bg-red-950/30 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-100 transition-colors">
@@ -97,41 +98,45 @@ const Dashboard = () => {
             
             {userRole === 'user' && (
               <>
-                <button onClick={() => setActiveTab('orders')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'orders' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                <button onClick={() => setActiveTab('orders')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'orders' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
                   <div className="flex items-center gap-2"><Package className="w-4 h-4" /> {t('my_orders')}</div>
                 </button>
-                <button onClick={() => setActiveTab('custom')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'custom' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                <button onClick={() => setActiveTab('custom')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'custom' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
                   <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {t('custom_requests')}</div>
-                  <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px]">{customOrders.length}</span>
+                  <span className="bg-white dark:bg-[#1E1E1E]/20 px-2 py-0.5 rounded-full text-[10px]">{customOrders.length}</span>
                 </button>
               </>
             )}
 
             {(userRole === 'craftsman' || userRole === 'company') && (
               <>
-                <button onClick={() => setActiveTab('workshop')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'workshop' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                <button onClick={() => setActiveTab('workshop')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'workshop' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
                   <div className="flex items-center gap-2"><Wrench className="w-4 h-4" /> {t('manage_workshop')}</div>
                 </button>
-                <button onClick={() => setActiveTab('portfolio')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'portfolio' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                <button onClick={() => setActiveTab('portfolio')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'portfolio' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
                   <div className="flex items-center gap-2"><PlusCircle className="w-4 h-4" /> {t('add_portfolio_item')}</div>
                 </button>
                 <button onClick={() => setActiveTab('verification')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'verification' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                  <div className="flex items-center gap-2"><Award className="w-4 h-4" />{isAr ? ' توثيق الحساب' : ' Verify Account'}</div>
                 </button>
               </>
             )}
 
             {userRole === 'admin' && (
               <>
-                <button onClick={() => setActiveTab('admin_stats')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'admin_stats' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                <button onClick={() => setActiveTab('admin_stats')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'admin_stats' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
                   <div className="flex items-center gap-2"><BarChart3 className="w-4 h-4" /> {t('admin_panel')}</div>
                 </button>
-                <button onClick={() => setActiveTab('commissions')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'commissions' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                <button onClick={() => setActiveTab('manage_users')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'manage_users' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
+                  <div className="flex items-center gap-2"><UserCheck className="w-4 h-4" /> إدارة المستخدمين والنجارين</div>
+                </button>
+                <button onClick={() => setActiveTab('commissions')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'commissions' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
                   <div className="flex items-center gap-2"><Percent className="w-4 h-4" /> {t('commission_dashboard')}</div>
                 </button>
               </>
             )}
 
-            <button onClick={() => setActiveTab('settings')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'settings' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+            <button onClick={() => setActiveTab('settings')} className={`flex-1 lg:flex-none flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${activeTab === 'settings' ? 'bg-brand-gold text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-[#121212] dark:hover:bg-white dark:bg-[#1E1E1E]/5'}`}>
               <div className="flex items-center gap-2"><Settings className="w-4 h-4" /> {t('account_settings')}</div>
             </button>
           </div>
@@ -151,7 +156,7 @@ const Dashboard = () => {
                 {customOrders.length > 0 ? (
                   <div className="space-y-4">
                     {customOrders.map((item, idx) => (
-                      <div key={idx} className="bg-gray-50 dark:bg-black/20 p-4 rounded-xl flex justify-between items-center text-xs">
+                      <div key={idx} className="bg-gray-50 dark:bg-[#121212] dark:bg-black/20 p-4 rounded-xl flex justify-between items-center text-xs">
                         <span className="font-bold text-brand-dark dark:text-white">{item.id} - {item.type}</span>
                         <span className="text-green-600 font-bold">{item.status}</span>
                       </div>
@@ -183,7 +188,7 @@ const Dashboard = () => {
                     <h4 className="text-2xl font-bold mt-1 text-green-900 dark:text-green-300">0</h4>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 pt-2">{t('stats_note')}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 pt-2">{t('stats_note')}</p>
               </div>
             )}
 
@@ -192,12 +197,12 @@ const Dashboard = () => {
                 <h3 className="font-bold text-brand-dark dark:text-white text-base md:text-lg border-b border-gray-100 dark:border-white/10 pb-4">{t('add_portfolio_item')}</h3>
                 <div className="space-y-4 max-w-md text-xs">
                   <div>
-                    <label className="block font-semibold text-gray-500 mb-1">{t('piece_title')}</label>
-                    <input type="text" placeholder={t('piece_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
+                    <label className="block font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('piece_title')}</label>
+                    <input type="text" placeholder={t('piece_placeholder')} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
                   </div>
                   <div>
-                    <label className="block font-semibold text-gray-500 mb-1">{t('price_label')}</label>
-                    <input type="number" placeholder="1200" className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
+                    <label className="block font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('price_label')}</label>
+                    <input type="number" placeholder="1200" className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
                   </div>
                   <button className="bg-brand-dark dark:bg-brand-gold text-white font-bold px-6 py-3 rounded-xl uppercase tracking-wider">{t('publish_btn')}</button>
                 </div>
@@ -206,7 +211,7 @@ const Dashboard = () => {
 
             {(userRole === 'craftsman' || userRole === 'company') && activeTab === 'verification' && (
               <div className="space-y-6">
-                <h3 className="font-bold text-brand-dark dark:text-white text-base md:text-lg border-b border-gray-100 dark:border-white/10 pb-4">توثيق الحساب (اشتراك 50$ شهرياً)</h3>
+                <h3 className="font-bold text-brand-dark dark:text-white text-base md:text-lg border-b border-gray-100 dark:border-white/10 pb-4">{isAr ? 'توثيق الحساب (اشتراك 50$ شهرياً)' : 'Account Verification ($50/Month)'}</h3>
                 
                 {submissionSuccess ? (
                   <div className="bg-green-50 dark:bg-green-950/20 p-8 rounded-2xl border border-green-200 text-center space-y-4">
@@ -219,70 +224,70 @@ const Dashboard = () => {
                 ) : (
                   <form onSubmit={handleFullVerificationSubmit} className="space-y-4 text-xs">
                     <div className="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-xl border border-amber-200 text-amber-800 dark:text-amber-300 space-y-1">
-                      <p className="font-bold">مزايا باقة التوثيق الشهري (50$):</p>
-                      <p className="text-[11px]">شارة توثيق رسمية، أولوية عرض الورشة على الخريطة، وإدارة مبيعات متقدمة.</p>
+                      <p className="font-bold">{isAr ? 'مزايا باقة التوثيق الشهري (50$):' : 'Verification Badge Benefits ($50):'}</p>
+                      <p className="text-[11px]">{isAr ? 'شارة توثيق رسمية، أولوية عرض الورشة على الخريطة، وإدارة مبيعات متقدمة.' : 'Official verified badge, priority map listing, and advanced sales management.'}</p>
                     </div>
 
                     <div>
-                      <label className="block font-semibold text-gray-600 dark:text-gray-300 mb-1">رقم الهوية الرسمية / السجل التجاري</label>
+                      <label className="block font-semibold text-gray-600 dark:text-gray-300 mb-1">{isAr ? 'رقم الهوية الرسمية / السجل التجاري' : 'Official ID / Commercial Record'}</label>
                       <input 
                         type="text" 
                         required
-                        placeholder="أدخل الرقم الرسمي للمستمسك"
+                        placeholder={isAr ? "أدخل الرقم الرسمي للمستمسك" : "Enter official ID number"}
                         value={idNumber}
                         onChange={(e) => setIdNumber(e.target.value)}
-                        className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 outline-none dark:text-white"
+                        className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 outline-none dark:text-white"
                       />
                     </div>
 
                     <div>
-                      <label className="block font-semibold text-gray-600 dark:text-gray-300 mb-1">اسم الورشة أو الشركة الرسمي</label>
+                      <label className="block font-semibold text-gray-600 dark:text-gray-300 mb-1">{isAr ? 'اسم الورشة أو الشركة الرسمي' : 'Official Workshop/Company Name'}</label>
                       <input 
                         type="text" 
                         required
-                        placeholder="مثال: معرض النخبة للأثاث الفاخر"
+                        placeholder={isAr ? "مثال: معرض النخبة للأثاث الفاخر" : "e.g., Elite Luxury Furniture"}
                         value={workshopName}
                         onChange={(e) => setWorkshopName(e.target.value)}
-                        className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 outline-none dark:text-white"
+                        className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 outline-none dark:text-white"
                       />
                     </div>
 
                     <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-6 text-center cursor-pointer hover:border-brand-gold transition-colors">
                       <Upload className="w-8 h-8 text-brand-gold mx-auto mb-2" />
-                      <p className="text-xs text-gray-500 font-medium">اختر وارفع صور مستمسكات الهوية أو رخصة العمل وصور الورشة</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{isAr ? 'اختر وارفع صور مستمسكات الهوية أو رخصة العمل وصور الورشة' : 'Click to upload ID, work license, and workshop photos'}</p>
                     </div>
 
-                    <div className="bg-gray-50 dark:bg-black/20 p-5 rounded-2xl space-y-4 border border-gray-100 dark:border-white/5">
+                    <div className="bg-gray-50 dark:bg-[#121212] dark:bg-black/20 p-5 rounded-2xl space-y-4 border border-gray-100 dark:border-white/10 dark:border-white/5">
                       <div className="flex items-center gap-2 font-bold text-brand-dark dark:text-white">
-                        <CreditCard className="w-5 h-5 text-brand-gold" /> تفاصيل الدفع الإلكتروني (اشتراك شهري: 50$)
+                        <CreditCard className="w-5 h-5 text-brand-gold" /> {isAr ? 'تفاصيل الدفع الإلكتروني (اشتراك شهري: 50$)' : 'Electronic Payment Details ($50/month)'}
                       </div>
                       
                       <div>
-                        <label className="block text-[11px] font-semibold text-gray-500 mb-1">رقم البطاقة الائتمانية</label>
+                        <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">{isAr ? 'رقم البطاقة الائتمانية' : 'Credit Card Number'}</label>
                         <input 
                           type="text" 
                           required
                           placeholder="4532 •••• •••• 8921" 
                           value={cardNumber}
                           onChange={(e) => setCardNumber(e.target.value)}
-                          className="w-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" 
+                          className="w-full bg-white dark:bg-[#1E1E1E] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" 
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-[11px] font-semibold text-gray-500 mb-1">تاريخ الانتهاء</label>
+                          <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">{isAr ? 'تاريخ الانتهاء' : 'Expiry Date'}</label>
                           <input 
                             type="text" 
                             required
                             placeholder="MM/YY" 
                             value={expiryDate}
                             onChange={(e) => setExpiryDate(e.target.value)}
-                            className="w-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" 
+                            className="w-full bg-white dark:bg-[#1E1E1E] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" 
                           />
                         </div>
                         <div>
-                          <label className="block text-[11px] font-semibold text-gray-500 mb-1">رمز الأمان (CVV)</label>
+                          <label className="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">{isAr ? 'رمز الأمان (CVV)' : 'CVV Security Code'}</label>
                           <input 
                             type="password" 
                             required
@@ -290,19 +295,58 @@ const Dashboard = () => {
                             placeholder="123" 
                             value={cvv}
                             onChange={(e) => setCvv(e.target.value)}
-                            className="w-full bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" 
+                            className="w-full bg-white dark:bg-[#1E1E1E] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" 
                           />
                         </div>
                       </div>
                     </div>
 
                     <button type="submit" className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-4 rounded-xl uppercase tracking-wider hover:bg-brand-gold transition-colors shadow-lg">
-                                  دفع 50$ وتقديم طلب التوثيق
+                                  {isAr ? 'دفع 50$ وتقديم طلب التوثيق' : 'Pay $50 & Submit Request'}
                 </button>
               </form>
             )}
           </div>
         )}
+            
+            {userRole === 'admin' && activeTab === 'manage_users' && (
+              <div className="space-y-6">
+                <h3 className="font-bold text-brand-dark dark:text-white text-base md:text-lg border-b border-gray-100 dark:border-white/10 pb-4">إدارة حسابات المستخدمين والنجارين والشركات</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-right text-xs">
+                    <thead>
+                      <tr className="border-b border-gray-200 dark:border-white/10 text-gray-400">
+                        <th className="pb-3">الاسم</th>
+                        <th className="pb-3">نوع الحساب</th>
+                        <th className="pb-3">الحالة</th>
+                        <th className="pb-3">إجراءات التحكم</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 dark:divide-white/5">
+                      <tr>
+                        <td className="py-3 font-bold text-brand-dark dark:text-white">أحمد النجار</td>
+                        <td className="py-3 text-amber-600 font-semibold">نجار (Craftsman)</td>
+                        <td className="py-3"><span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px]">موثوق</span></td>
+                        <td className="py-3">
+                          <button onClick={() => alert('تم تعديل صلاحيات الحساب بنجاح')} className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-bold hover:bg-blue-100 mr-2">تعديل</button>
+                          <button onClick={() => alert('تم حذف الحساب بنجاح')} className="bg-red-50 text-red-600 px-3 py-1 rounded-lg font-bold hover:bg-red-100">حذف</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 font-bold text-brand-dark dark:text-white">ورشة الإبداع</td>
+                        <td className="py-3 text-blue-600 font-semibold">شركة (Company)</td>
+                        <td className="py-3"><span className="bg-gray-100 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full text-[10px]">غير موثوق</span></td>
+                        <td className="py-3">
+                          <button onClick={() => alert('تم تعديل صلاحيات الحساب بنجاح')} className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-bold hover:bg-blue-100 mr-2">تعديل</button>
+                          <button onClick={() => alert('تم حذف الحساب بنجاح')} className="bg-red-50 text-red-600 px-3 py-1 rounded-lg font-bold hover:bg-red-100">حذف</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
             {userRole === 'admin' && activeTab === 'admin_stats' && (
               <div className="space-y-6">
                 <h3 className="font-bold text-brand-dark dark:text-white text-base md:text-lg border-b border-gray-100 dark:border-white/10 pb-4">{t('admin_panel')}</h3>
@@ -344,12 +388,12 @@ const Dashboard = () => {
                 <h3 className="font-bold text-brand-dark dark:text-white text-base md:text-lg border-b border-gray-100 dark:border-white/10 pb-4">{t('account_settings')}</h3>
                 <div className="space-y-4 max-w-md text-xs">
                   <div>
-                    <label className="block font-semibold text-gray-500 mb-1">{t('full_name')}</label>
-                    <input type="text" defaultValue={userName} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
+                    <label className="block font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('full_name')}</label>
+                    <input type="text" defaultValue={userName} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
                   </div>
                   <div>
-                    <label className="block font-semibold text-gray-500 mb-1">{t('email')}</label>
-                    <input type="text" defaultValue={userEmail} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
+                    <label className="block font-semibold text-gray-500 dark:text-gray-400 mb-1">{t('email')}</label>
+                    <input type="text" defaultValue={userEmail} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white" />
                   </div>
                   <button className="bg-brand-dark dark:bg-brand-gold text-white font-bold px-6 py-3 rounded-xl uppercase tracking-wider">{t('save_changes')}</button>
                 </div>
