@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Globe, ShoppingBag, Moon, Sun, Bell, MapPin } from 'lucide-react';
+import { Menu, X, Globe, ShoppingBag, Moon, Sun, Bell, MapPin, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
@@ -30,12 +30,15 @@ const Navbar = () => {
         San3a
       </Link>
 
-      <div className="hidden md:flex gap-8 items-center text-sm tracking-wide font-medium">
+      <div className="hidden md:flex gap-6 items-center text-sm tracking-wide font-medium">
         <Link to="/" className="hover:text-brand-gold transition-colors">{t('furniture')}</Link>
         <Link to="/custom" className="hover:text-brand-gold transition-colors">{t('custom')}</Link>
         <Link to="/vendors" className="hover:text-brand-gold transition-colors">{t('vendors')}</Link>
         <Link to="/map" className="hover:text-brand-gold transition-colors flex items-center gap-1 text-brand-gold font-bold">
           <MapPin className="w-4 h-4" /> {t('map')}
+        </Link>
+        <Link to="/dashboard" className="hover:text-brand-gold transition-colors flex items-center gap-1 text-brand-dark dark:text-white font-bold bg-brand-gold/10 px-3 py-1.5 rounded-lg">
+          <User className="w-4 h-4 text-brand-gold" /> {t('my_profile_nav')}
         </Link>
       </div>
 
@@ -74,7 +77,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* أزرار الموبايل */}
       <div className="flex items-center gap-2 md:hidden">
         <button onClick={() => setNotificationsOpen(!notificationsOpen)} className="relative p-2">
           <Bell className="w-5 h-5" />
@@ -107,6 +109,9 @@ const Navbar = () => {
           <Link to="/vendors" onClick={() => setIsOpen(false)} className="text-lg">{t('vendors')}</Link>
           <Link to="/map" onClick={() => setIsOpen(false)} className="text-lg text-brand-gold font-bold flex items-center gap-2">
             <MapPin className="w-5 h-5" /> {t('map')}
+          </Link>
+          <Link to="/dashboard" onClick={() => setIsOpen(false)} className="text-lg text-brand-dark dark:text-white font-bold flex items-center gap-2">
+            <User className="w-5 h-5 text-brand-gold" /> {t('my_profile_nav')}
           </Link>
           <button onClick={toggleLanguage} className="text-right text-brand-gold font-bold">{i18n.language === 'ar' ? 'Switch to English' : 'التحويل للعربية'}</button>
           <div className="flex flex-col gap-3 mt-2 border-t border-gray-200 dark:border-white/10 pt-4">

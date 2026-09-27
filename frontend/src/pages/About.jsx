@@ -33,7 +33,6 @@ const About = () => {
         {/* مميزات الشركة */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-gray-100">
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col items-center">
-            <Award className="w-10 h-10 text-brand-gold mb-4" />
             <h3 className="font-bold text-brand-dark text-lg mb-2">جودة استثنائية</h3>
             <p className="text-gray-500 text-sm">نستخدم أجود أنواع الأخشاب والخامات العالمية.</p>
           </div>
@@ -43,7 +42,6 @@ const About = () => {
             <p className="text-gray-500 text-sm">ضمان حقيقي لمدة 5 سنوات على كافة قطع الأثاث.</p>
           </div>
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col items-center">
-            <HeartHandshake className="w-10 h-10 text-brand-gold mb-4" />
             <h3 className="font-bold text-brand-dark text-lg mb-2">ثقة وموثوقية</h3>
             <p className="text-gray-500 text-sm">نتعامل مع نخبة الحرفيين المعتمدين في العراق.</p>
           </div>

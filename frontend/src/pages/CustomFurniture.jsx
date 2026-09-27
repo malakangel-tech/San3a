@@ -12,6 +12,7 @@ const CustomFurniture = () => {
   const [furnitureType, setFurnitureType] = useState('sofa');
   const [woodType, setWoodType] = useState('beech');
   const [size, setSize] = useState('medium');
+  const [details, setDetails] = useState('');
 
   const calculateEstimate = () => {
     let base = furnitureType === 'sofa' ? 600 : furnitureType === 'table' ? 450 : 300;
@@ -22,6 +23,21 @@ const CustomFurniture = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // حفظ الطلب في الـ LocalStorage ليعرض في لوحة التحكم
+    const newOrder = {
+      id: 'CS-' + Math.floor(1000 + Math.random() * 9000),
+      type: furnitureType,
+      wood: woodType,
+      size: size,
+      price: calculateEstimate(),
+      date: new Date().toISOString().split('T')[0],
+      status: 'قيد المراجعة'
+    };
+
+    const existingOrders = JSON.parse(localStorage.getItem('customOrders') || '[]');
+    localStorage.setItem('customOrders', JSON.stringify([newOrder, ...existingOrders]));
+
     setSubmitted(true);
   };
 
@@ -31,7 +47,6 @@ const CustomFurniture = () => {
         
         <div className="text-center mb-12">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-brand-gold/10 text-brand-gold px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4">
-            <Sparkles className="w-4 h-4" /> {t('custom_tag')}
           </motion.div>
           <h1 className={`text-3xl md:text-5xl font-bold text-brand-dark dark:text-white mb-4 ${isAr ? '' : 'font-serif'}`}>
             {t('custom_heading')}
@@ -94,7 +109,7 @@ const CustomFurniture = () => {
 
               <div>
                 <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{t('details_placeholder')}</label>
-                <textarea rows="4" placeholder={t('details_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold resize-none dark:text-white"></textarea>
+                <textarea rows="4" value={details} onChange={(e) => setDetails(e.target.value)} placeholder={t('details_placeholder')} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold resize-none dark:text-white"></textarea>
               </div>
 
               <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-6 text-center cursor-pointer hover:border-brand-gold transition-colors">

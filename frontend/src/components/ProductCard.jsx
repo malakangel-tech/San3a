@@ -21,7 +21,7 @@ const ProductCard = ({ id, image, title, price, rating, isCustomizable, onCompar
       <div className="relative w-full h-56 md:h-64 rounded-lg overflow-hidden bg-[#F5F5F5] dark:bg-black/30 mb-4 flex items-center justify-center">
         <Link to={`/product/${id}`} className="absolute inset-0 z-10 w-full h-full"></Link>
 
-        <img src={image} alt={title} className="w-4/5 h-4/5 object-contain mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700" />
+        <img src={image} alt={title} className="w-4/5 h-4/5 object-cover w-full h-full mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700" />
         
         {isCustomizable && (
           <div className="absolute top-3 left-3 bg-brand-gold text-white text-[10px] font-bold px-3 py-1 rounded-sm tracking-wider uppercase shadow-md z-20 pointer-events-none">
@@ -39,7 +39,6 @@ const ProductCard = ({ id, image, title, price, rating, isCustomizable, onCompar
         </button>
 
         <button onClick={(e) => e.stopPropagation()} className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-black/60 rounded-full text-gray-400 hover:text-red-500 transition-colors z-20">
-          <Heart className="w-4 h-4" />
         </button>
 
         <div className="absolute inset-x-0 bottom-0 p-3 flex justify-center gap-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
