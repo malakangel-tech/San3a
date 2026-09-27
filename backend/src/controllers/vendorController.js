@@ -1,4 +1,3 @@
-
 const pool = require("../config/db");
 
 // GET /api/vendors
@@ -76,6 +75,8 @@ const createVendor = async (req, res) => {
       rating,
       verified,
       location,
+      latitude,
+      longitude,
       projectsCount,
       experience,
       image,
@@ -98,6 +99,8 @@ const createVendor = async (req, res) => {
         rating,
         verified,
         location,
+        latitude,
+        longitude,
         projects_count,
         experience,
         image,
@@ -106,8 +109,8 @@ const createVendor = async (req, res) => {
         portfolio
       )
       VALUES (
-        $1, $2, $3, $4, $5, $6,
-        $7, $8, $9, $10, $11
+        $1, $2, $3, $4, $5, $6, $7,
+        $8, $9, $10, $11, $12, $13
       )
       RETURNING *
       `,
@@ -117,6 +120,8 @@ const createVendor = async (req, res) => {
         rating ?? 0,
         verified ?? false,
         location,
+        latitude ?? null,
+        longitude ?? null,
         projectsCount ?? 0,
         experience ?? 0,
         image,
@@ -148,6 +153,8 @@ const updateVendor = async (req, res) => {
       rating,
       verified,
       location,
+      latitude,
+      longitude,
       projectsCount,
       experience,
       image,
@@ -165,13 +172,15 @@ const updateVendor = async (req, res) => {
         rating = $3,
         verified = $4,
         location = $5,
-        projects_count = $6,
-        experience = $7,
-        image = $8,
-        cover = $9,
-        about = $10,
-        portfolio = $11
-      WHERE id = $12
+        latitude = $6,
+        longitude = $7,
+        projects_count = $8,
+        experience = $9,
+        image = $10,
+        cover = $11,
+        about = $12,
+        portfolio = $13
+      WHERE id = $14
       RETURNING *
       `,
       [
@@ -180,6 +189,8 @@ const updateVendor = async (req, res) => {
         rating,
         verified,
         location,
+        latitude ?? null,
+        longitude ?? null,
         projectsCount,
         experience,
         image,
@@ -202,6 +213,71 @@ const updateVendor = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to update vendor",
+      error: error.message,
+    });
+  }
+};
+
+// PUT /api/vendors/:id/location
+const updateVendorLocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { latitude, longitude } = req.body;
+
+    if (latitude === undefined || longitude === undefined) {
+      return res.status(400).json({
+        message: "Latitude and longitude are required",
+      });
+    }
+
+    if (
+      typeof latitude !== "number" ||
+      typeof longitude !== "number"
+    ) {
+      return res.status(400).json({
+        message: "Latitude and longitude must be numbers",
+      });
+    }
+
+    if (latitude < -90 || latitude > 90) {
+      return res.status(400).json({
+        message: "Latitude must be between -90 and 90",
+      });
+    }
+
+    if (longitude < -180 || longitude > 180) {
+      return res.status(400).json({
+        message: "Longitude must be between -180 and 180",
+      });
+    }
+
+    const result = await pool.query(
+      `
+      UPDATE vendors
+      SET
+        latitude = $1,
+        longitude = $2
+      WHERE id = $3
+      RETURNING *
+      `,
+      [latitude, longitude, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: "Vendor not found",
+      });
+    }
+
+    res.json({
+      message: "Vendor location updated successfully",
+      vendor: result.rows[0],
+    });
+  } catch (error) {
+    console.error("UPDATE VENDOR LOCATION ERROR:", error);
+
+    res.status(500).json({
+      message: "Failed to update vendor location",
       error: error.message,
     });
   }
@@ -242,5 +318,6 @@ module.exports = {
   getVendorById,
   createVendor,
   updateVendor,
+  updateVendorLocation,
   deleteVendor,
 };
