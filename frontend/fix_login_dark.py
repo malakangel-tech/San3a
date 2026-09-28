@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import os
+
+path = "src/pages/Login.jsx"
+
+new_login_code = """import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -102,3 +106,9 @@ const Login = () => {
 };
 
 export default Login;
+"""
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(new_login_code)
+
+print("✅ تم إصلاح تباين الألوان والوضع الليلي لصفحة تسجيل الدخول بنجاح!")
