@@ -43,7 +43,7 @@ const Home = () => {
 
         <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-brand-gold text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6 shadow-md">
-            <Sparkles className="w-4 h-4" /> {t('hero_tag')}
+             {t('hero_tag')}
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={`text-4xl md:text-6xl font-bold text-white leading-tight mb-6 ${isAr ? '' : 'font-serif'}`} dangerouslySetInnerHTML={{ __html: t('hero_title') }} />
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-gray-200 text-base md:text-lg max-w-xl mb-10 font-light">{t('hero_desc')}</motion.p>

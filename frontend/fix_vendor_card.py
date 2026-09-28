@@ -1,4 +1,8 @@
-import React from 'react';
+import os
+
+path = os.path.expanduser("~/San3a/frontend/src/components/VendorCard.jsx")
+
+code = """import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Star, MapPin, BadgeCheck, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -75,3 +79,9 @@ const VendorCard = ({ id, name, specialty, rating, verified, location, projectsC
 };
 
 export default VendorCard;
+"""
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(code)
+
+print("✅ تم تعديل كارت النجار ليوجه المستخدم للملف الصحيح بنجاح!")

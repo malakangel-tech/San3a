@@ -1,4 +1,8 @@
-import React from 'react';
+import os
+
+path = os.path.expanduser("~/San3a/frontend/src/pages/VendorProfile.jsx")
+
+full_code = """import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +73,9 @@ const VendorProfile = () => {
               {isAr ? 'طلب تفصيل خاص' : 'Custom Order'}
             </Link>
             
-
+            <button className="w-full border-2 border-gray-100 dark:border-white/10 text-brand-dark dark:text-white py-3 rounded-lg font-bold hover:border-brand-gold hover:text-brand-gold transition-colors flex items-center justify-center gap-2">
+              <MessageSquare className="w-4 h-4"/> {t('contact_vendor')}
+            </button>
           </div>
         </div>
 
@@ -110,3 +116,9 @@ const VendorProfile = () => {
 };
 
 export default VendorProfile;
+"""
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(full_code)
+
+print("✅ تم إعادة كتابة ملف VendorProfile بالكامل ليعمل بشكل سليم 100%!")
