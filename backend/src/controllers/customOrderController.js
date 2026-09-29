@@ -1,3 +1,4 @@
+
 const pool = require("../config/db");
 
 // ============================================
@@ -16,6 +17,8 @@ const createCustomOrder = async (req, res) => {
       estimated_price,
       vendor_id,
       design_url,
+      ai_analysis,
+      ai_recommendations,
     } = req.body;
 
     // Validation
@@ -74,9 +77,11 @@ const createCustomOrder = async (req, res) => {
         size,
         details,
         estimated_price,
-        design_url
+        design_url,
+        ai_analysis,
+        ai_recommendations
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *
       `,
       [
@@ -88,6 +93,8 @@ const createCustomOrder = async (req, res) => {
         details || null,
         estimated_price,
         design_url || null,
+        ai_analysis || null,
+        ai_recommendations || null,
       ]
     );
 
@@ -194,6 +201,8 @@ const updateCustomOrder = async (req, res) => {
       details,
       estimated_price,
       design_url,
+      ai_analysis,
+      ai_recommendations,
     } = req.body;
 
     // Check order belongs to current user
@@ -244,9 +253,11 @@ const updateCustomOrder = async (req, res) => {
         details = COALESCE($4, details),
         estimated_price = COALESCE($5, estimated_price),
         design_url = COALESCE($6, design_url),
+        ai_analysis = COALESCE($7, ai_analysis),
+        ai_recommendations = COALESCE($8, ai_recommendations),
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $7
-      AND user_id = $8
+      WHERE id = $9
+      AND user_id = $10
       RETURNING *
       `,
       [
@@ -256,6 +267,8 @@ const updateCustomOrder = async (req, res) => {
         details,
         estimated_price,
         design_url,
+        ai_analysis,
+        ai_recommendations,
         id,
         user_id,
       ]
@@ -313,6 +326,7 @@ const deleteCustomOrder = async (req, res) => {
     });
   }
 };
+
 // ============================================
 // PUT /api/custom-orders/:id/status
 // Update Custom Order Status

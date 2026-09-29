@@ -19,6 +19,8 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const adminVerificationRoutes = require("./routes/adminVerificationRoutes");
 const verificationRoutes = require("./routes/verificationRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const aiRoutes = require("./routes/aiRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 const app = express();
 
@@ -44,6 +46,8 @@ app.use("/api/verification", verificationRoutes);
 app.use("/api/verification", verificationRoutes);
 app.use("/api/admin/verification", adminVerificationRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.json({
