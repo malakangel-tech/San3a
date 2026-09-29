@@ -1,3 +1,4 @@
+
 """
 Custom exceptions for the AI module.
 """
@@ -10,6 +11,24 @@ class AIServiceError(Exception):
 
 class GeminiError(AIServiceError):
     """Exception raised when Gemini API call fails."""
+    pass
+
+
+class GeminiRateLimitError(GeminiError):
+    """Exception raised when Gemini API quota/rate limit is exceeded."""
+
+    def __init__(
+        self,
+        message: str,
+        retry_after: int | None = None,
+    ):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+class GeminiQuotaError(GeminiRateLimitError):
+    """Exception raised when Gemini API quota is exhausted."""
+
     pass
 
 
