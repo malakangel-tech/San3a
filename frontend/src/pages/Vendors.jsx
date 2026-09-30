@@ -3,14 +3,19 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import VendorCard from '../components/VendorCard';
+import { apiFetch } from '../services/api';
 
 const Vendors = () => {
   const [localVendors, setLocalVendors] = useState([]);
+  const [vendors, setVendors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   useEffect(() => {
     let stored = JSON.parse(localStorage.getItem('newVendors')) || [];
     const currentRole = localStorage.getItem('userRole');
     const currentName = localStorage.getItem('userName');
-    
+
     if ((currentRole === 'craftsman' || currentRole === 'company') && currentName) {
       if (!stored.some(v => v.name === currentName)) {
         stored.push({ id: Date.now(), name: currentName, rating: 5, verified: true, isVerified: true, specialty: 'نجار عام', location: 'البصرة', image: 'https://via.placeholder.com/150', portfolio: [] });
@@ -22,18 +27,38 @@ const Vendors = () => {
 
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
-  
+
   const [searchTerm, setSearchTerm] = useState('');
 
-  // بيانات نجارين مفصلة جداً
-  const allVendors = [
-    { id: 1, name: isAr ? 'أحمد النجار' : 'Ahmed Al-Najjar', specialty: t('specialty_classic'), rating: 5, verified: true, location: isAr ? 'البصرة' : 'Basra', projectsCount: 124, experience: '15', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80', portfolio: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80', 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=100&q=80', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80'] },
-    { id: 2, name: isAr ? 'ورشة الإبداع' : 'Ebdaa Workshop', specialty: t('specialty_modern'), rating: 4, verified: false, location: isAr ? 'بغداد' : 'Baghdad', projectsCount: 89, experience: '8', image: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&q=80', portfolio: ['https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=100&q=80', 'https://images.unsplash.com/photo-1550254478-ead40cc54513?w=100&q=80', 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=100&q=80'] },
-    { id: 3, name: isAr ? 'محمد علي' : 'Mohammed Ali', specialty: t('specialty_classic'), rating: 5, verified: true, location: isAr ? 'أربيل' : 'Erbil', projectsCount: 340, experience: '22', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80', portfolio: ['https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=100&q=80', 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=100&q=80', 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=100&q=80'] },
-    { id: 4, name: isAr ? 'لمسة خشب' : 'Wood Touch', specialty: t('specialty_modern'), rating: 5, verified: true, location: isAr ? 'البصرة' : 'Basra', projectsCount: 56, experience: '5', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80', portfolio: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80', 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=100&q=80', 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=100&q=80'] }
-  ];
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        const data = await apiFetch('/vendors');
+        const formattedVendors = data.map(vendor => ({
+          id: vendor.id,
+          name: vendor.name,
+          specialty: vendor.specialty || 'نجار عام',
+          rating: vendor.rating || 0,
+          verified: vendor.verified || false,
+          location: vendor.location || 'غير محدد',
+          projectsCount: vendor.projects_count || 0,
+          experience: vendor.experience || 0,
+          image: vendor.image || 'https://via.placeholder.com/150',
+          portfolio: vendor.portfolio || []
+        }));
+        setVendors(formattedVendors);
+      } catch (err) {
+        console.error('Failed to fetch vendors:', err);
+        setError('Failed to load vendors');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const filteredVendors = allVendors.filter(vendor => vendor.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    fetchVendors();
+  }, [i18n.language]);
+
+  const filteredVendors = vendors.filter(vendor => vendor.name.toLowerCase().includes(searchTerm.toLowerCase()));
   const allFilteredVendors = [...filteredVendors, ...localVendors.filter(v => v.name.toLowerCase().includes(searchTerm.toLowerCase()))];
 
   return (
@@ -103,7 +128,13 @@ const Vendors = () => {
           </div>
 
           {/* شبكة البطاقات */}
-          {allFilteredVendors.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-gold"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 text-red-500">{error}</div>
+          ) : allFilteredVendors.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {allFilteredVendors.map((vendor, index) => (
                 <motion.div key={vendor.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>

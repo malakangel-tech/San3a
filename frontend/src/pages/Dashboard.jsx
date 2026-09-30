@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Package, Clock, Settings, LogOut, CheckCircle, Shield, Wrench, Building2, UserCheck, BarChart3, PlusCircle, Award, Percent, Upload, CreditCard, Trash2, Edit3, ImageIcon, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../services/api';
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
@@ -10,6 +11,7 @@ const Dashboard = () => {
 
   const [activeTab, setActiveTab] = useState('workshop');
   const [customOrders, setCustomOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [userRole, setUserRole] = useState('user');
   const [userName, setUserName] = useState('Malak Mahdi');
   const [userEmail, setUserEmail] = useState('malak2006malak28@gmail.com');
@@ -18,6 +20,8 @@ const Dashboard = () => {
   const [verifiedStatus, setVerifiedStatus] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // طلبات الورشة الواردة
   const [workshopOrders, setWorkshopOrders] = useState([
@@ -46,34 +50,56 @@ const Dashboard = () => {
   ]);
 
   useEffect(() => {
-    try {
-      const savedOrders = JSON.parse(localStorage.getItem('customOrders') || '[]');
-      setCustomOrders(savedOrders);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const currentRole = localStorage.getItem('userRole');
+        const currentName = localStorage.getItem('userName');
+        const currentEmail = localStorage.getItem('userEmail');
+        const currentImage = localStorage.getItem('userImage') || '';
+        const currentBio = localStorage.getItem('userBio') || '';
+        const isVerified = localStorage.getItem('isVerified') === 'true';
 
-      const savedPortfolio = JSON.parse(localStorage.getItem('craftsmanPortfolio') || '[]');
-      setPortfolioItems(savedPortfolio);
+        if (currentRole) {
+          setUserRole(currentRole);
+          if (currentRole === 'user') setActiveTab('orders');
+          else if (currentRole === 'admin') setActiveTab('admin_stats');
+          else setActiveTab('workshop');
+        }
+        if (currentName) setUserName(currentName);
+        if (currentEmail) setUserEmail(currentEmail);
+        setUserImage(currentImage);
+        setUserBio(currentBio);
+        setVerifiedStatus(isVerified);
 
-      const currentRole = localStorage.getItem('userRole');
-      const currentName = localStorage.getItem('userName');
-      const currentEmail = localStorage.getItem('userEmail');
-      const currentImage = localStorage.getItem('userImage') || '';
-      const currentBio = localStorage.getItem('userBio') || '';
-      const isVerified = localStorage.getItem('isVerified') === 'true';
+        // Fetch orders from backend
+        try {
+          const ordersData = await apiFetch('/orders');
+          setOrders(ordersData);
+        } catch (err) {
+          console.error('Failed to fetch orders:', err);
+        }
 
-      if (currentRole) {
-        setUserRole(currentRole);
-        if (currentRole === 'user') setActiveTab('orders');
-        else if (currentRole === 'admin') setActiveTab('admin_stats');
-        else setActiveTab('workshop');
+        // Fetch custom orders from backend
+        try {
+          const customOrdersData = await apiFetch('/custom-orders');
+          setCustomOrders(customOrdersData);
+        } catch (err) {
+          console.error('Failed to fetch custom orders:', err);
+        }
+
+        // Load portfolio from localStorage (this is still local for now)
+        const savedPortfolio = JSON.parse(localStorage.getItem('craftsmanPortfolio') || '[]');
+        setPortfolioItems(savedPortfolio);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load dashboard data');
+      } finally {
+        setLoading(false);
       }
-      if (currentName) setUserName(currentName);
-      if (currentEmail) setUserEmail(currentEmail);
-      setUserImage(currentImage);
-      setUserBio(currentBio);
-      setVerifiedStatus(isVerified);
-    } catch (err) {
-      console.error(err);
-    }
+    };
+
+    fetchData();
   }, []);
 
   const updateOrderStatus = (id, newStatus) => {
@@ -135,9 +161,23 @@ const Dashboard = () => {
   const totalUsersCount = usersList.length;
   const partnersCount = usersList.filter(u => u.role === 'craftsman' || u.role === 'company').length;
 
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212] transition-colors duration-300 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-gold"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212] transition-colors duration-300 py-8 px-4 md:px-16">
       <div className="max-w-6xl mx-auto w-full space-y-6">
+
+        {error && (
+          <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-4 rounded-2xl text-center text-red-600 dark:text-red-400 text-xs">
+            {error}
+          </div>
+        )}
 
         {/* Profile Header */}
         <div className="bg-white dark:bg-[#1E1E1E] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
