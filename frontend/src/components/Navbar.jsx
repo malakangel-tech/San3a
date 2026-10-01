@@ -33,7 +33,8 @@ const Navbar = () => {
       <div className="hidden md:flex gap-6 items-center text-sm tracking-wide font-medium">
         <Link to="/" className="hover:text-brand-gold transition-colors">{t('furniture')}</Link>
         <Link to="/custom" className="hover:text-brand-gold transition-colors">{t('custom')}</Link>
-        <Link to="/vendors" className="hover:text-brand-gold transition-colors">{t('vendors')}</Link>
+        <Link to="/ai" className="hover:text-brand-gold transition-colors font-bold text-brand-gold flex items-center gap-1">✨ الذكاء الاصطناعي</Link>
+          <Link to="/vendors" className="hover:text-brand-gold transition-colors">{t('vendors')}</Link>
         <Link to="/map" className="hover:text-brand-gold transition-colors flex items-center gap-1 text-brand-gold font-bold">
           <MapPin className="w-4 h-4" /> {t('map')}
         </Link>
@@ -106,6 +107,7 @@ const Navbar = () => {
         <div className={`absolute top-[80px] left-0 w-full flex flex-col p-6 gap-6 md:hidden shadow-xl border-t z-50 ${darkMode ? 'bg-[#181818] border-white/10' : 'bg-brand-bg border-brand-gold/20'}`}>
           <Link to="/" onClick={() => setIsOpen(false)} className="text-lg">{t('furniture')}</Link>
           <Link to="/custom" onClick={() => setIsOpen(false)} className="text-lg">{t('custom')}</Link>
+          <Link to="/ai" className="hover:text-brand-gold transition-colors font-bold text-brand-gold flex items-center gap-1">✨ الذكاء الاصطناعي</Link>
           <Link to="/vendors" onClick={() => setIsOpen(false)} className="text-lg">{t('vendors')}</Link>
           <Link to="/map" onClick={() => setIsOpen(false)} className="text-lg text-brand-gold font-bold flex items-center gap-2">
             <MapPin className="w-5 h-5" /> {t('map')}

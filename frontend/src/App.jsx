@@ -1,4 +1,5 @@
 import React from 'react';
+import AIAssistant from './pages/AIAssistant';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CustomerLayout from './layouts/CustomerLayout';
 import Home from './pages/Home';
@@ -19,6 +20,7 @@ function App() {
   return (
     <Router>
       <Routes>
+          <Route path="/ai" element={<AIAssistant />} />
         <Route path="/" element={<CustomerLayout><Home /></CustomerLayout>} />
         <Route path="/custom" element={<CustomerLayout><CustomFurniture /></CustomerLayout>} />
         <Route path="/vendors" element={<CustomerLayout><Vendors /></CustomerLayout>} />
