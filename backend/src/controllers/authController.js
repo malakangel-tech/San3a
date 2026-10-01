@@ -1,10 +1,11 @@
+
 const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await pool.query(
@@ -23,70 +24,95 @@ const register = async (req, res) => {
 
     // Insert user
     const result = await pool.query(
-      `INSERT INTO users (name, email, password)
-       VALUES ($1, $2, $3)
+      `INSERT INTO users (name, email, password, role)
+       VALUES ($1, $2, $3, $4)
        RETURNING id, name, email, role`,
-      [name, email, hashedPassword]
+      [name, email, hashedPassword, role || "user"]
+    );
+
+    const user = result.rows[0];
+
+    // Create JWT
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      "MY_SECRET_KEY",
+      {
+        expiresIn: "1h",
+      }
     );
 
     res.status(201).json({
       message: "User registered successfully",
-      user: result.rows[0],
+      token,
+      user,
     });
+  } catch (error) {
+    console.error("REGISTER ERROR:", error);
 
- } catch (error) {
-  console.error("REGISTER ERROR:", error);
-
-  res.status(500).json({
-    message: error.message,
-  });
-}
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
-const login = async (req , res) => {
-  try{
-    const { email , password} = req.body;
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
     const result = await pool.query(
       "SELECT * FROM users WHERE email = $1",
       [email]
-    )
+    );
 
-    if(result.rows.length === 0){
+    if (result.rows.length === 0) {
       return res.status(401).json({
-        message: 'invalid email or password'
-      })
+        message: "invalid email or password",
+      });
     }
 
-    const user = result.rows[0]
+    const user = result.rows[0];
 
-    const isPasswordCorect = await bcrypt.compare(
+    const isPasswordCorrect = await bcrypt.compare(
       password,
       user.password
-    )
+    );
 
-    if(!isPasswordCorect){
+    if (!isPasswordCorrect) {
       return res.status(401).json({
-        message: 'invalid email or password'
-      })
+        message: "invalid email or password",
+      });
     }
 
     const token = jwt.sign(
-      
-      { id: user.id, email: user.email, role: user.role }, "MY_SECRET_KEY" ,{expiresIn : '1h'}
-    )
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      "MY_SECRET_KEY",
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.json({
-      message: 'login successful',
-      token
-    })
+      message: "login successful",
+      token,
+    });
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
 
-  } catch(error){
-    console.log(error);
     res.status(500).json({
-      message: 'server error'
-    })
+      message: "server error",
+    });
   }
-}
+};
 
-module.exports =  {register , login};
+module.exports = {
+  register,
+  login,
+};

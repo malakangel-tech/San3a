@@ -20,7 +20,7 @@ const Register = () => {
     profileImage: '',
     bio: ''
   });
-
+  console.log("REGISTER DATA:", formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // تفريغ الأخطاء السابقة
