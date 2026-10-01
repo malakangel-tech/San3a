@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Mail, Lock, Eye, EyeOff, ShieldAlert, ImageIcon, FileText, AlertCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { apiFetch } from '../services/api';
 
 const Register = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    fullName: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -19,7 +21,7 @@ const Register = () => {
     bio: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // تفريغ الأخطاء السابقة
 
@@ -35,15 +37,46 @@ const Register = () => {
       return;
     }
 
-    // 3. حفظ البيانات في التخزين المحلي
-    localStorage.setItem('userRole', formData.role);
-    localStorage.setItem('userEmail', formData.email);
-    localStorage.setItem('userName', formData.fullName);
-    if (formData.profileImage) localStorage.setItem('userImage', formData.profileImage);
-    if (formData.bio) localStorage.setItem('userBio', formData.bio);
+    setLoading(true);
 
-    // توجيه المستخدم للوحة التحكم بعد نجاح التسجيل
-    navigate('/dashboard');
+    try {
+      const data = await apiFetch('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        }),
+      });
+
+      if (!data.token) {
+        throw new Error('Registration failed: token not received');
+      }
+
+      // حفظ JWT
+      localStorage.setItem('token', data.token);
+
+      // قراءة بيانات المستخدم من JWT
+      const payload = JSON.parse(
+        atob(data.token.split('.')[1])
+      );
+
+      localStorage.setItem('userRole', payload.role || 'user');
+      localStorage.setItem('userEmail', payload.email || '');
+      localStorage.setItem('userId', payload.id || '');
+      localStorage.setItem('userName', formData.name);
+      if (formData.profileImage) localStorage.setItem('userImage', formData.profileImage);
+      if (formData.bio) localStorage.setItem('userBio', formData.bio);
+
+      // توجيه المستخدم للوحة التحكم بعد نجاح التسجيل
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('REGISTER ERROR:', error);
+      setError(error.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,7 +105,7 @@ const Register = () => {
             <label className="block font-semibold text-gray-600 dark:text-gray-300 mb-1.5">{t('full_name')}</label>
             <div className="relative">
               <User className="absolute right-3.5 top-3.5 w-4 h-4 text-gray-400" />
-              <input type="text" required placeholder={t('name_placeholder')} value={formData.fullName} onChange={(e) => setFormData({...formData, fullName: e.target.value})} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3.5 pr-10 outline-none focus:border-brand-gold dark:text-white" />
+              <input type="text" required placeholder={t('name_placeholder')} value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3.5 pr-10 outline-none focus:border-brand-gold dark:text-white" />
             </div>
           </div>
 
@@ -135,8 +168,8 @@ const Register = () => {
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-3.5 rounded-xl hover:bg-brand-gold dark:hover:bg-brand-gold/80 transition-colors uppercase tracking-wider text-xs shadow-md mt-2">
-            {t('create_account_btn')}
+          <button type="submit" disabled={loading} className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-3.5 rounded-xl hover:bg-brand-gold dark:hover:bg-brand-gold/80 transition-colors uppercase tracking-wider text-xs shadow-md mt-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            {loading ? 'Creating account...' : t('create_account_btn')}
           </button>
 
           <div className="text-center pt-4 border-t border-gray-100 dark:border-white/10">

@@ -1,18 +1,75 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Hammer, Sparkles, Upload, CheckCircle2, Calculator } from 'lucide-react';
+import { Hammer, Sparkles, Upload, CheckCircle2, Calculator, X } from 'lucide-react';
+import { apiFetch } from '../services/api';
 
 const CustomFurniture = () => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
 
   const [submitted, setSubmitted] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [aiRecommendations, setAiRecommendations] = useState(null);
+  const [imageAnalysis, setImageAnalysis] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+
   const [furnitureType, setFurnitureType] = useState('sofa');
   const [woodType, setWoodType] = useState('beech');
   const [size, setSize] = useState('medium');
   const [details, setDetails] = useState('');
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      setError('Image size must not exceed 10 MB');
+      return;
+    }
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setError('Only JPEG, PNG and WEBP images are allowed');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const data = await apiFetch('/ai/analyze-image', {
+        method: 'POST',
+        body: formData,
+        headers: {}, // Let browser set Content-Type for FormData
+      });
+
+      setImageAnalysis(data);
+      setUploadedImage(URL.createObjectURL(file));
+
+      // Auto-fill form based on AI analysis
+      if (data.furniture_type) {
+        setFurnitureType(data.furniture_type.toLowerCase());
+      }
+      if (data.wood_type) {
+        setWoodType(data.wood_type.toLowerCase());
+      }
+    } catch (err) {
+      console.error('IMAGE ANALYSIS ERROR:', err);
+      setError(err.message || 'Failed to analyze image');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setUploadedImage(null);
+    setImageAnalysis(null);
+  };
 
   const calculateEstimate = () => {
     let base = furnitureType === 'sofa' ? 600 : furnitureType === 'table' ? 450 : 300;
@@ -21,24 +78,45 @@ const CustomFurniture = () => {
     return Math.round(base * woodMultiplier * sizeMultiplier);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // حفظ الطلب في الـ LocalStorage ليعرض في لوحة التحكم
-    const newOrder = {
-      id: 'CS-' + Math.floor(1000 + Math.random() * 9000),
-      type: furnitureType,
-      wood: woodType,
-      size: size,
-      price: calculateEstimate(),
-      date: new Date().toISOString().split('T')[0],
-      status: 'قيد المراجعة'
-    };
+    setLoading(true);
+    setError('');
 
-    const existingOrders = JSON.parse(localStorage.getItem('customOrders') || '[]');
-    localStorage.setItem('customOrders', JSON.stringify([newOrder, ...existingOrders]));
+    try {
+      // First, get AI recommendations
+      const aiData = await apiFetch('/ai/custom-design', {
+        method: 'POST',
+        body: JSON.stringify({
+          furniture_type: furnitureType,
+          dimensions: size,
+          wood_type: woodType,
+          additional_requirements: details
+        }),
+      });
 
-    setSubmitted(true);
+      setAiRecommendations(aiData);
+
+      // Then create the custom order
+      const orderData = await apiFetch('/custom-orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          furniture_type: furnitureType,
+          wood_type: woodType,
+          size: size,
+          details: details,
+          estimated_price: calculateEstimate(),
+          ai_recommendations: aiData
+        }),
+      });
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error('CUSTOM FURNITURE ERROR:', err);
+      setError(err.message || 'Failed to create custom furniture request');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,11 +134,23 @@ const CustomFurniture = () => {
           </p>
         </div>
 
+        {error && (
+          <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-4 rounded-2xl text-center text-red-600 dark:text-red-400 text-xs mb-6">
+            {error}
+          </div>
+        )}
+
         {submitted ? (
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white dark:bg-[#1E1E1E] p-12 rounded-2xl shadow-sm border border-gray-100 dark:border-white/10 text-center space-y-4">
             <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto" />
             <h3 className="text-2xl font-bold text-brand-dark dark:text-white">{t('custom_success_title')}</h3>
             <p className="text-gray-500 dark:text-gray-400 text-sm">{t('custom_success_desc')}</p>
+            {aiRecommendations && (
+              <div className="mt-6 p-4 bg-brand-gold/10 rounded-xl text-left">
+                <h4 className="font-bold text-brand-dark dark:text-white mb-2">{isAr ? 'توصيات الذكاء الاصطناعي' : 'AI Recommendations'}</h4>
+                <pre className="text-xs text-gray-600 dark:text-gray-300 overflow-auto max-h-40">{JSON.stringify(aiRecommendations, null, 2)}</pre>
+              </div>
+            )}
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -112,13 +202,45 @@ const CustomFurniture = () => {
                 <textarea rows="4" value={details} onChange={(e) => setDetails(e.target.value)} placeholder={t('details_placeholder')} className="w-full bg-gray-50 dark:bg-[#121212] dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3.5 text-sm outline-none focus:border-brand-gold resize-none dark:text-white"></textarea>
               </div>
 
-              <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-6 text-center cursor-pointer hover:border-brand-gold transition-colors">
-                <Upload className="w-8 h-8 text-brand-gold mx-auto mb-2" />
-                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{t('upload_label')}</p>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{isAr ? 'صورة مرجعية (اختياري)' : 'Reference Image (Optional)'}</label>
+                <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-6 text-center cursor-pointer hover:border-brand-gold transition-colors relative">
+                  {uploadedImage ? (
+                    <div className="relative">
+                      <img src={uploadedImage} alt="Uploaded" className="max-h-40 mx-auto rounded-lg" />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      {imageAnalysis && (
+                        <div className="mt-2 p-2 bg-brand-gold/10 rounded-lg text-left">
+                          <p className="text-xs font-bold text-brand-dark dark:text-white">{isAr ? 'تحليل الصورة' : 'Image Analysis'}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-300">{imageAnalysis.description || isAr ? 'تم تحليل الصورة بنجاح' : 'Image analyzed successfully'}</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,image/webp"
+                        onChange={handleImageUpload}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        disabled={loading}
+                      />
+                      <Upload className="w-8 h-8 text-brand-gold mx-auto mb-2" />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{t('upload_label')}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{isAr ? 'JPEG, PNG, WEBP (حد أقصى 10MB)' : 'JPEG, PNG, WEBP (max 10MB)'}</p>
+                    </>
+                  )}
+                </div>
               </div>
 
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-4 rounded-xl hover:bg-brand-gold dark:hover:bg-brand-gold/80 transition-colors shadow-lg uppercase tracking-wider text-sm flex items-center justify-center gap-2">
-                <Hammer className="w-5 h-5" /> {t('submit_custom')}
+              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={loading} className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-4 rounded-xl hover:bg-brand-gold dark:hover:bg-brand-gold/80 transition-colors shadow-lg uppercase tracking-wider text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <Hammer className="w-5 h-5" /> {loading ? (isAr ? 'جاري المعالجة...' : 'Processing...') : t('submit_custom')}
               </motion.button>
             </form>
 

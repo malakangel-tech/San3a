@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ArrowLeft, Sparkles, Scale, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import { apiFetch } from '../services/api';
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -11,13 +12,34 @@ const Home = () => {
 
   const [comparedProducts, setComparedProducts] = useState([]);
   const [showComparisonModal, setShowComparisonModal] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const products = [
-    { id: 1, title: isAr ? 'أريكة عصرية مخملية' : 'Modern Velvet Sofa', price: 850, rating: 4, image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', isCustomizable: true },
-    { id: 2, title: isAr ? 'طاولة خشبية' : 'Wooden Table', price: 420, rating: 5, image: 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=600&q=80', isCustomizable: false },
-    { id: 3, title: isAr ? 'أريكة مخملية فاخرة' : 'Luxury Velvet Sofa', price: 980, rating: 4, image: 'https://images.unsplash.com/photo-1550254478-ead40cc54513?w=600&q=80', isCustomizable: true },
-    { id: 4, title: isAr ? 'كرسي كلاسيك' : 'Classic Chair', price: 210, rating: 5, image: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=600&q=80', isCustomizable: false }
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await apiFetch('/products');
+        const lang = i18n.language || 'en';
+        const formattedProducts = data.map(product => ({
+          id: product.id,
+          title: product.title?.[lang] || product.title?.en || product.title,
+          price: product.price,
+          rating: product.rating,
+          image: product.images?.[0] || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
+          isCustomizable: product.is_customizable
+        }));
+        setProducts(formattedProducts);
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+        setError('Failed to load products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [i18n.language]);
 
   const handleCompareToggle = (product) => {
     setComparedProducts(prev => {
@@ -64,16 +86,24 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <ProductCard 
-              key={product.id} 
-              {...product} 
-              onCompare={handleCompareToggle}
-              isCompared={comparedProducts.some(p => p.id === product.id)}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-gold"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500">{error}</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                {...product}
+                onCompare={handleCompareToggle}
+                isCompared={comparedProducts.some(p => p.id === product.id)}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* شريط المقارنة العائم */}

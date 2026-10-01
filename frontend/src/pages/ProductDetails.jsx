@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Star, ShoppingCart, Heart, ShieldCheck, Truck, Clock, ChevronRight, ChevronLeft, Minus, Plus, MessageSquare, CheckCircle, Upload } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { apiFetch } from '../services/api';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -15,6 +16,9 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState(0);
   const [mainImage, setMainImage] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   // حالة لإضافة تقييم جديد
   const [reviewsList, setReviewsList] = useState([
@@ -25,38 +29,34 @@ const ProductDetails = () => {
   const [newRating, setNewRating] = useState(5);
   const [showReviewModal, setShowReviewModal] = useState(false);
 
-  const products = [
-    { 
-      id: 1, title: isAr ? 'أريكة عصرية' : 'Modern Sofa', price: 850, rating: 4, reviewsCount: 128,
-      desc: isAr ? 'أريكة مصممة بعناية فائقة لتجمع بين الراحة والأناقة المطلقة. مصنوعة من خشب الزان الصلب ومغطاة بطبقة من المخمل الإيطالي.' : 'Carefully designed sofa combining comfort and elegance.',
-      dimensions: '220cm x 90cm x 85cm', material: isAr ? 'خشب زان، مخمل' : 'Beech wood, Velvet',
-      images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80', 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&q=80'],
-      colors: [{ name: 'رمادي', code: '#4A4A4A' }, { name: 'أزرق', code: '#002366' }, { name: 'بيج', code: '#D5C4A1' }]
-    },
-    { 
-      id: 2, title: isAr ? 'طاولة خشبية' : 'Wooden Table', price: 420, rating: 5, reviewsCount: 95,
-      desc: isAr ? 'طاولة طعام خشبية بتصميم راقٍ تناسب غرف الطعام العصرية وتتحمل الاستخدام المكثف.' : 'Wooden dining table with an elegant design.',
-      dimensions: '160cm x 90cm x 75cm', material: isAr ? 'خشب سنديان طبيعي' : 'Natural Oak wood',
-      images: ['https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=800&q=80', 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=800&q=80'],
-      colors: [{ name: 'بشني غامق', code: '#5C4033' }, { name: 'خشب طبيعي', code: '#C19A6B' }]
-    },
-    { 
-      id: 3, title: isAr ? 'أريكة مخملية' : 'Velvet Sofa', price: 980, rating: 4, reviewsCount: 64,
-      desc: isAr ? 'أريكة مخملية فاخرة تضفي لمسة من الفخامة على صالة الاستقبال.' : 'Luxury velvet sofa adding a touch of elegance.',
-      dimensions: '240cm x 95cm x 90cm', material: isAr ? 'قماش مخمل فاخر' : 'Luxury velvet fabric',
-      images: ['https://images.unsplash.com/photo-1550254478-ead40cc54513?w=800&q=80', 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80'],
-      colors: [{ name: 'زيتوني', code: '#556B2F' }, { name: 'رمادي فاتح', code: '#D3D3D3' }]
-    },
-    { 
-      id: 4, title: isAr ? 'كرسي كلاسيك' : 'Classic Chair', price: 210, rating: 5, reviewsCount: 42,
-      desc: isAr ? 'كرسي تصميم عصري مريح ومناسب للقراءة أو غرف المعيشة.' : 'Modern comfortable chair suitable for reading or living rooms.',
-      dimensions: '80cm x 85cm x 95cm', material: isAr ? 'قماش مع أرجل خشبية' : 'Fabric with wooden legs',
-      images: ['https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=800&q=80', 'https://images.unsplash.com/photo-1580481077494-e3299ac25b94?w=800&q=80'],
-      colors: [{ name: 'أبيض', code: '#FFFFFF' }, { name: 'أسود', code: '#000000' }]
-    }
-  ];
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await apiFetch(`/products/${id}`);
+        const lang = i18n.language || 'en';
+        setProduct({
+          id: data.id,
+          title: data.title?.[lang] || data.title?.en || data.title,
+          price: data.price,
+          rating: data.rating,
+          reviewsCount: data.reviews_count,
+          desc: data.description,
+          dimensions: data.dimensions,
+          material: data.material,
+          images: data.images || ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80'],
+          colors: data.colors || [{ name: 'Default', code: '#000000' }],
+          isCustomizable: data.is_customizable
+        });
+      } catch (err) {
+        console.error('Failed to fetch product:', err);
+        setError('Failed to load product');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const product = products.find(p => p.id === parseInt(id)) || products[0];
+    fetchProduct();
+  }, [id, i18n.language]);
 
   const handleAddToCart = () => {
     addToCart({
@@ -83,9 +83,25 @@ const ProductDetails = () => {
     setShowReviewModal(false);
   };
 
+  if (loading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212] transition-colors duration-300 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-gold"></div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212] transition-colors duration-300 items-center justify-center">
+        <div className="text-red-500">{error || 'Product not found'}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-[#FDFCFB] dark:bg-[#121212] transition-colors duration-300">
-      
+
       <div className="pt-8 px-6 md:px-16 max-w-7xl mx-auto w-full text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
         <Link to="/" className="hover:text-brand-gold transition-colors">{t('furniture')}</Link>
         {isAr ? <ChevronLeft className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}

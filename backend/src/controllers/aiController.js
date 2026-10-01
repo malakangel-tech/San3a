@@ -3,7 +3,7 @@ const axios = require("axios");
 const pool = require("../config/db");
 
 const AI_SERVICE_URL =
-  process.env.AI_SERVICE_URL || "http://localhost:8000";
+  process.env.AI_SERVICE_URL || "http://localhost:5000";
 
 
 // ============================================

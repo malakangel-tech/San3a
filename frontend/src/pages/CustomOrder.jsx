@@ -1,38 +1,52 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Upload, Calculator, CheckCircle, Sparkles } from 'lucide-react';
+import { apiFetch } from '../services/api';
 
 const CustomOrder = () => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
 
-  const [furnitureType, setFurnitureType] = useState('أريكة / صوفا فاخرة');
-  const [woodType, setWoodType] = useState('خشب زان طبيعي');
-  const [size, setSize] = useState('متوسط (3 إلى 4 اشخاص)');
+  const [furnitureType, setFurnitureType] = useState('sofa');
+  const [woodType, setWoodType] = useState('beech');
+  const [size, setSize] = useState('medium');
   const [details, setDetails] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const calculatePrice = () => {
     let base = 500;
-    if (furnitureType.includes('طاولة')) base = 600;
-    if (woodType.includes('زان')) base += 120;
-    if (size.includes('كبير')) base += 250;
+    if (furnitureType === 'table') base = 600;
+    if (woodType === 'beech') base += 120;
+    if (size === 'large') base += 250;
     return base;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newOrder = {
-      id: Date.now(),
-      customer: 'مستخدم محلي',
-      type: furnitureType,
-      details: `${size} / ${woodType} - ${details}`,
-      status: 'جديد'
-    };
-    
-    const existingOrders = JSON.parse(localStorage.getItem('customOrders') || '[]');
-    localStorage.setItem('customOrders', JSON.stringify([newOrder, ...existingOrders]));
-    setSubmitted(true);
+    setLoading(true);
+    setError('');
+
+    try {
+      const data = await apiFetch('/custom-orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          furniture_type: furnitureType,
+          wood_type: woodType,
+          size: size,
+          details: details,
+          estimated_price: calculatePrice()
+        }),
+      });
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error('CUSTOM ORDER ERROR:', err);
+      setError(err.message || 'Failed to create custom order');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,6 +61,12 @@ const CustomOrder = () => {
             {isAr ? 'أخبرنا برؤيتك، اختر خاماتك، واحصل على تقدير فوري للتكلفة.' : 'Tell us your vision and get an instant estimate.'}
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-4 rounded-2xl text-center text-red-600 dark:text-red-400 text-xs">
+            {error}
+          </div>
+        )}
 
         {submitted ? (
           <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50 p-8 rounded-2xl text-center space-y-4">
@@ -71,9 +91,9 @@ const CustomOrder = () => {
                   onChange={(e) => setFurnitureType(e.target.value)}
                   className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white"
                 >
-                  <option value="أريكة / صوفا فاخرة">أريكة / صوفا فاخرة</option>
-                  <option value="طاولة طعام خشبية">طاولة طعام خشبية</option>
-                  <option value="خزانة ملابس مخصصة">خزانة ملابس مخصصة</option>
+                  <option value="sofa">{isAr ? 'أريكة / صوفا فاخرة' : 'Sofa'}</option>
+                  <option value="table">{isAr ? 'طاولة طعام خشبية' : 'Table'}</option>
+                  <option value="cabinet">{isAr ? 'خزانة ملابس مخصصة' : 'Cabinet'}</option>
                 </select>
               </div>
 
@@ -82,13 +102,37 @@ const CustomOrder = () => {
                 <select
                   value={woodType}
                   onChange={(e) => setWoodType(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white"
+                  className="w-full bg-gray-50 dark:bg:black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white"
                 >
-                  <option value="خشب زان طبيعي">خشب زان طبيعي</option>
-                  <option value="خشب بلوط فاخر">خشب بلوط فاخر</option>
-                  <option value="خشب MDF اسباني">خشب MDF اسباني</option>
+                  <option value="beech">{isAr ? 'خشب زان طبيعي' : 'Beech'}</option>
+                  <option value="oak">{isAr ? 'خشب بلوط فاخر' : 'Oak'}</option>
+                  <option value="mdf">{isAr ? 'خشب MDF اسباني' : 'MDF'}</option>
                 </select>
               </div>
+
+              <div>
+                <label className="block font-bold text-gray-700 dark:text-gray-300 mb-2">{isAr ? 'الحجم' : 'Size'}</label>
+                <select
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                  className="w-full bg-gray-50 dark:bg:black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white"
+                >
+                  <option value="small">{isAr ? 'صغير' : 'Small'}</option>
+                  <option value="medium">{isAr ? 'متوسط' : 'Medium'}</option>
+                  <option value="large">{isAr ? 'كبير' : 'Large'}</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-bold text-gray-700 dark:text-gray-300 mb-2">{isAr ? 'تفاصيل إضافية' : 'Additional Details'}</label>
+              <textarea
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
+                rows="3"
+                placeholder={isAr ? 'اكتب أي تفاصيل إضافية...' : 'Write any additional details...'}
+                className="w-full bg-gray-50 dark:bg:black/40 border border-gray-200 dark:border-white/10 rounded-xl p-3 outline-none dark:text-white resize-none"
+              ></textarea>
             </div>
 
             <div className="bg-amber-50/50 dark:bg-amber-950/20 p-6 rounded-2xl border border-amber-200/60 dark:border-amber-900/40 text-center space-y-3">
@@ -103,10 +147,11 @@ const CustomOrder = () => {
 
             <button
               type="submit"
-              className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs shadow-lg hover:bg-brand-gold transition-colors flex items-center justify-center gap-2"
+              disabled={loading}
+              className="w-full bg-brand-dark dark:bg-brand-gold text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs shadow-lg hover:bg-brand-gold transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Upload className="w-4 h-4" />
-              <span>{isAr ? 'إرسال طلب التفصيل للحرفيين' : 'Send Custom Order'}</span>
+              <span>{loading ? (isAr ? 'جاري الإرسال...' : 'Sending...') : (isAr ? 'إرسال طلب التفصيل للحرفيين' : 'Send Custom Order')}</span>
             </button>
           </form>
         )}
