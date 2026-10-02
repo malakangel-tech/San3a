@@ -64,11 +64,14 @@ const VendorProfile = () => {
               <div className="flex justify-between items-center text-gray-600 dark:text-gray-300"><span className="flex items-center gap-2"><Briefcase className="w-4 h-4"/> {t('projects')}</span> <span className="font-bold text-brand-dark dark:text-white">+{vendor.projectsCount || 0}</span></div>
               <div className="flex justify-between items-center text-gray-600 dark:text-gray-300"><span className="flex items-center gap-2"><Star className="w-4 h-4"/> {t('experience')}</span> <span className="font-bold text-brand-dark dark:text-white">{vendor.experience || 0}</span></div>
             </div>
+            <Link 
+  to={`/custom?vendor=${vendor.id}`} 
+  className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl text-center block transition duration-200"
+>
+  {isAr ? 'طلب تفصيل خاص' : 'Custom Order'}
+</Link>
 
-            <Link to="/custom-order" className="w-full bg-brand-dark text-white py-3 rounded-lg font-bold hover:bg-brand-gold transition-colors mb-3 flex items-center justify-center gap-2 shadow-lg">
-              {isAr ? 'طلب تفصيل خاص' : 'Custom Order'}
-            </Link>
-            
+
 
           </div>
         </div>

@@ -49,7 +49,7 @@ const Dashboard = () => {
     { id: 3, name: 'ملاك مهدي', role: 'user', roleLabel: 'مستخدم (User)', verified: false }
   ]);
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -72,23 +72,25 @@ const Dashboard = () => {
         setUserBio(currentBio);
         setVerifiedStatus(isVerified);
 
-        // Fetch orders from backend
+        // جلب الطلبات مع حماية الكود من الانهيار
         try {
           const ordersData = await apiFetch('/orders');
-          setOrders(ordersData);
+          setOrders(ordersData || []);
         } catch (err) {
           console.error('Failed to fetch orders:', err);
+          setOrders([]);
         }
 
-        // Fetch custom orders from backend
+        // جلب الطلبات الخاصة
         try {
           const customOrdersData = await apiFetch('/custom-orders');
-          setCustomOrders(customOrdersData);
+          setCustomOrders(customOrdersData || []);
         } catch (err) {
           console.error('Failed to fetch custom orders:', err);
+          setCustomOrders([]);
         }
 
-        // Load portfolio from localStorage (this is still local for now)
+        // تصحيح قراءة البورتفوليو من التخزين المحلي بأمان
         const savedPortfolio = JSON.parse(localStorage.getItem('craftsmanPortfolio') || '[]');
         setPortfolioItems(savedPortfolio);
       } catch (err) {
@@ -101,6 +103,7 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
+
 
   const updateOrderStatus = (id, newStatus) => {
     setWorkshopOrders(workshopOrders.map(o => o.id === id ? { ...o, status: newStatus } : o));

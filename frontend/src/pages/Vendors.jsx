@@ -32,28 +32,16 @@ const Vendors = () => {
 
   useEffect(() => {
     const fetchVendors = async () => {
-      try {
-        const data = await apiFetch('/vendors');
-        const formattedVendors = data.map(vendor => ({
-          id: vendor.id,
-          name: vendor.name,
-          specialty: vendor.specialty || 'نجار عام',
-          rating: vendor.rating || 0,
-          verified: vendor.verified || false,
-          location: vendor.location || 'غير محدد',
-          projectsCount: vendor.projects_count || 0,
-          experience: vendor.experience || 0,
-          image: vendor.image || 'https://via.placeholder.com/150',
-          portfolio: vendor.portfolio || []
-        }));
-        setVendors(formattedVendors);
-      } catch (err) {
-        console.error('Failed to fetch vendors:', err);
-        setError('Failed to load vendors');
-      } finally {
-        setLoading(false);
-      }
-    };
+      
+      const originalVendors = [
+        { id: 1, name: 'أحمد النجار', shop_name: 'أحمد النجار', specialty: 'كلاسيكي', category: 'كلاسيكي', rating: 5, verified: true, location: 'البصرة', projectsCount: 124, projects_completed: 124, experience: '15', experience_years: '15', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80', profile_image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80', portfolio: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=600&q=80', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=600&q=80'], portfolio_images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=600&q=80', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=600&q=80'] },
+        { id: 2, name: 'ورشة الإبداع', shop_name: 'ورشة الإبداع', specialty: 'حديث', category: 'حديث', rating: 4, verified: false, location: 'بغداد', projectsCount: 89, projects_completed: 89, experience: '8', experience_years: '8', image: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&q=80', profile_image: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&q=80', portfolio: ['https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=600&q=80', 'https://images.unsplash.com/photo-1550254478-ead40cc54513?w=600&q=80', 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=600&q=80'], portfolio_images: ['https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=600&q=80', 'https://images.unsplash.com/photo-1550254478-ead40cc54513?w=600&q=80', 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?w=600&q=80'] },
+        { id: 3, name: 'محمد علي', shop_name: 'محمد علي', specialty: 'كلاسيكي', category: 'كلاسيكي', rating: 5, verified: true, location: 'أربيل', projectsCount: 340, projects_completed: 340, experience: '22', experience_years: '22', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80', profile_image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80', portfolio: ['https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80'], portfolio_images: ['https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80', 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=600&q=80'] },
+        { id: 4, name: 'لمسة خشب', shop_name: 'لمسة خشب', specialty: 'حديث', category: 'حديث', rating: 5, verified: true, location: 'البصرة', projectsCount: 56, projects_completed: 56, experience: '5', experience_years: '5', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80', profile_image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80', portfolio: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80'], portfolio_images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80'] }
+      ];
+      setVendors(originalVendors);
+      setLoading(false);
+};
 
     fetchVendors();
   }, [i18n.language]);
