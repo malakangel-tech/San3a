@@ -16,30 +16,55 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await apiFetch('/products');
-        const lang = i18n.language || 'en';
-        const formattedProducts = data.map(product => ({
-          id: product.id,
-          title: product.title?.[lang] || product.title?.en || product.title,
-          price: product.price,
-          rating: product.rating,
-          image: product.images?.[0] || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
-          isCustomizable: product.is_customizable
-        }));
-        setProducts(formattedProducts);
-      } catch (err) {
-        console.error('Failed to fetch products:', err);
-        setError('Failed to load products');
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchProducts();
-  }, [i18n.language]);
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const dummyProducts = [
+        {
+          id: 1,
+          title: isAr ? 'طاولة طعام خشبية فاخرة' : 'Luxury Wooden Dining Table',
+          price: 850,
+          rating: 5,
+          image: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=600&q=80',
+          isCustomizable: true
+        },
+        {
+          id: 2,
+          title: isAr ? 'كنبة مخملية مودرن' : 'Modern Velvet Sofa',
+          price: 1200,
+          rating: 5,
+          image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
+          isCustomizable: true
+        },
+        {
+          id: 3,
+          title: isAr ? 'كرسي استرخاء جلد طبيعي' : 'Leather Lounge Chair',
+          price: 450,
+          rating: 4,
+          image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
+          isCustomizable: false
+        },
+        {
+          id: 4,
+          title: isAr ? 'خزانة كتب خشبية بتصميم عصري' : 'Modern Wooden Bookshelf',
+          price: 620,
+          rating: 5,
+          image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80',
+          isCustomizable: true
+        }
+      ];
+      setProducts(dummyProducts);
+    } catch (err) {
+      console.error('Failed to fetch products:', err);
+      setError('Failed to load products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, [i18n.language]);
 
   const handleCompareToggle = (product) => {
     setComparedProducts(prev => {
